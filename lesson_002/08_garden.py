@@ -22,7 +22,8 @@ all_flowers = garden_set & meadow_set
 print(all_flowers)
 
 # выведите на консоль те, которые растут в саду, но не растут на лугу
-# TODO здесь ваш код
+all_flowers = (garden_set | meadow_set) - meadow_set
+print(all_flowers)
 
 # выведите на консоль те, которые растут на лугу, но не растут в саду
 # TODO здесь ваш код

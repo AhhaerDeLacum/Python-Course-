@@ -38,3 +38,9 @@ for animal, mass in zoo_pets_mass.items():
     print(animal, mass)
     total_mass += mass
 print('Общая масса животных', total_mass)
+
+def some_func():
+    print('xa xa')
+
+result = some_func()
+print(result)

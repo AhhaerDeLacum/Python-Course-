@@ -46,6 +46,29 @@ store = {
 #         подсчет стоимости товара
 #     вывод на консоль количества и стоимости товара на складе
 
+for good, number in goods.items():
+    good_quantity = 0
+    good_price = 0
+    total_price = 0
+    i = 0
+    print(f'Наименование товара: {good}. Код товара: {number}')
+    for good in store[number]:
+        good_quantity += store[number][i]['quantity']
+        good_price += store[number][i]['price']
+        total_price = good_quantity * good_price
+        print(f'Кол-во товаров {good_quantity}, цена за 1 шт. - {good_price}, общая сумма всех товаров {total_price}\n')
+        i += 1
+
+
+# for number in store:
+#
+#
+#     for quantity in store[number]:
+#
+#         print(quantity)
+#
+#         print(store[number][0]) # показывает весь словарь
+#         print(store[number][0]['quantity'])# показывает кол во из первого словаря по индексу 0
 
 
 

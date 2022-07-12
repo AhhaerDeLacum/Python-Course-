@@ -24,6 +24,8 @@ def check_number(number):
     """Проверим число"""
     bulls = 0
     cows = 0
+    for i in range(0, 3):
+        number[i] = int(number[i])
     global _pick_n
     print(_pick_n)
     for i in range(0, len(number)):

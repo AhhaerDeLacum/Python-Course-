@@ -48,23 +48,21 @@
 from mastermind_engine import check_number, pick_a_number, SEQ
 
 while True:
-    number = input(f'Введите число')#1234
-    #number = list(number)
+    print('Загаданное число - ', pick_a_number()) # Вызываем функцию создания числа
+    number = input(f'Введите число ')#1234
+    number = list(number)
     print(number)
     if len(number) > 4:
         print('Ошибка, число должно быть 4-х значным')
-        number = input(f'Введите число')
+        number = input(f'Введите число ')
 
     if number[0] == '0':
         print('Ошибка, число не должно начинаться с 0')
-        number = input(f'Введите число')
+        number = input(f'Введите число ')
     number_set = set(number)
     if len(number_set) < 4:
         print('Ошибка, число должно состоять из уникальных символов')
-
-
-
-    pick_a_number()                               # загадываем число
+    print('Проверка числа', (check_number(number=number)))                            # проверяем число
 
 
 

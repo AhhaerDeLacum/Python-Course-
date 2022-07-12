@@ -13,18 +13,25 @@ def pick_a_number():
     global _pick_n
     _pick_n = random.sample(SEQ, 4)
     seq_to_check = list(set(SEQ) - set(seq_to_check))  # 0123
-    print(_pick_n)
     if _pick_n[0] == 0:
         _pick_n[0] = random.sample(seq_to_check, 1)
         number_1_with_index_0 = _pick_n[0][0]
         _pick_n[0] = number_1_with_index_0
+    return _pick_n
 
 
 def check_number(number):
     """Проверим число"""
-    # for position in range(0,4):
-    #     for number_ in pick_n: # number_ продумать имя
-    #         if number_[0] != 0:
-    #             if number_[position] ==
-    # if
-    # pass
+    bulls = 0
+    cows = 0
+    global _pick_n
+    print(_pick_n)
+    for i in range(0, len(number)):
+        #print(number[i], '///')
+        if number[i] == _pick_n[i]:
+            bulls += 1
+        for x in range(0, len(_pick_n)):
+            #print(_pick_n[x])
+            if (_pick_n[i] == number[x]) and (number[i] != _pick_n[i]):
+                cows += 1
+    return {'bulls': bulls, 'cows': cows}

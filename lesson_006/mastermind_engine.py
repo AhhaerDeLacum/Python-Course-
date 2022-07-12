@@ -28,5 +28,3 @@ def check_number(number):
     #             if number_[position] ==
     # if
     # pass
-pick_a_number()
-print(_pick_n)

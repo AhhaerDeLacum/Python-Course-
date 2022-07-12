@@ -45,14 +45,28 @@
 # Это пример применения SOLID принципа (см https://goo.gl/GFMoaI) в архитектуре программ.
 # Точнее, в этом случае важен принцип единственной ответственности - https://goo.gl/rYb3hT
 
-from mastermind_engine import check_number, pick_a_number
+from mastermind_engine import check_number, pick_a_number, SEQ
 
 while True:
-    number = input(f'Введите число')
-    pick_a_number()  # загадываем число
+    number = input(f'Введите число')#1234
+    #number = list(number)
+    print(number)
+    if len(number) > 4:
+        print('Ошибка, число должно быть 4-х значным')
+        number = input(f'Введите число')
+
+    if number[0] == '0':
+        print('Ошибка, число не должно начинаться с 0')
+        number = input(f'Введите число')
+    number_set = set(number)
+    if len(number_set) < 4:
+        print('Ошибка, число должно состоять из уникальных символов')
 
 
 
+    pick_a_number()                               # загадываем число
 
-    if 'число не отгадано':
-        break
+
+
+    # if 'число не отгадано':
+    #     break

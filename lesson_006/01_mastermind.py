@@ -58,17 +58,20 @@ while true:
         number = list(number)
         if number[0] == '0':
             print('Ошибка, число не должно начинаться с 0')
-            number = input(colored('Введите число ', 'blue'))
-            number = list(number)
+            # number = input(colored('Введите число ', 'blue'))
+            # number = list(number)
+            continue
         if len(number) > 4:
             print('Ошибка, число должно быть 4-х значным')
-            number = input(colored('Введите число ', 'blue'))
-            number = list(number)
-        number_set = set(number)
-        if len(number_set) < 4 or len(number) > 4:
+            # number = input(colored('Введите число ', 'blue'))
+            # number = list(number)
+            continue
+        #number_set = set(number)
+        if len(set(number)) < 4:
             print('Ошибка, число должно состоять из уникальных символов')
-            number = input(colored('Введите число ', 'blue'))
-            number = list(number)
+            # number = input(colored('Введите число ', 'blue'))
+            # number = list(number)
+            continue
         cprint('Результат{}'.format((check_number(number=number))), 'yellow')
         number_of_moves += 1  # проверяем число
         if check_number(number) == {'bulls': 4, 'cows': 0}:

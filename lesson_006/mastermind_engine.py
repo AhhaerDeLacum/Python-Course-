@@ -24,10 +24,9 @@ def check_number(number):
     """Проверим число"""
     bulls = 0
     cows = 0
-    for i in range(0, 3):
+    for i in range(0, 4):
         number[i] = int(number[i])
     global _pick_n
-    print(_pick_n)
     for i in range(0, len(number)):
         #print(number[i], '///')
         if number[i] == _pick_n[i]:
@@ -36,4 +35,5 @@ def check_number(number):
             #print(_pick_n[x])
             if (_pick_n[i] == number[x]) and (number[i] != _pick_n[i]):
                 cows += 1
-    return {'bulls': bulls, 'cows': cows}
+    dictionary = {'bulls': bulls, 'cows': cows}
+    return dictionary

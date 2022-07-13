@@ -44,27 +44,39 @@
 # Движок игры реализует только саму функциональность игры.
 # Это пример применения SOLID принципа (см https://goo.gl/GFMoaI) в архитектуре программ.
 # Точнее, в этом случае важен принцип единственной ответственности - https://goo.gl/rYb3hT
-
+from termcolor import cprint, colored
 from mastermind_engine import check_number, pick_a_number, SEQ
+number_of_moves = 0
+do_u_want_play_again = ''
+true = True
+while true:
+    number_of_moves = 0
+    cprint('Загаданное число - {} '.format(pick_a_number()), color='red')  # Вызываем функцию создания числа
+    while True:
+        number = input(colored('Введите число ', 'blue'))#1234
+        number = list(number)
+        if len(number) > 4:
+            print('Ошибка, число должно быть 4-х значным')
+            number = input(colored('Введите число ', 'blue'))
+            number = list(number)
+        if number[0] == '0':
+            print('Ошибка, число не должно начинаться с 0')
+            number = input(colored('Введите число ', 'blue'))
+            number = list(number)
+        number_set = set(number)
+        if len(number_set) < 4:
+            print('Ошибка, число должно состоять из уникальных символов')
+            number = input(colored('Введите число ', 'blue'))
+            number = list(number)
+        cprint('Результат{}'.format((check_number(number=number))),'yellow')
+        number_of_moves += 1# проверяем число
+        if check_number(number) == {'bulls': 4, 'cows': 0}:
+            cprint('Поздравляю! Колличество попыток:{}'.format(number_of_moves),'green')
+            do_u_want_play_again = input(colored('Хотите сыграть вновь ? ', "red"))
+            if do_u_want_play_again == ('Да') or do_u_want_play_again == ('да'):
+                break
+            else:
+                print('До скорого !')
+                exit()
 
-while True:
-    print('Загаданное число - ', pick_a_number()) # Вызываем функцию создания числа
-    number = input(f'Введите число ')#1234
-    number = list(number)
-    print(number)
-    if len(number) > 4:
-        print('Ошибка, число должно быть 4-х значным')
-        number = input(f'Введите число ')
 
-    if number[0] == '0':
-        print('Ошибка, число не должно начинаться с 0')
-        number = input(f'Введите число ')
-    number_set = set(number)
-    if len(number_set) < 4:
-        print('Ошибка, число должно состоять из уникальных символов')
-    print('Проверка числа', (check_number(number=number)))                            # проверяем число
-
-
-
-    # if 'число не отгадано':
-    #     break

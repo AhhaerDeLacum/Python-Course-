@@ -56,16 +56,16 @@ while true:
     while True:
         number = input(colored('Введите число ', 'blue'))  # 1234
         number = list(number)
-        if len(number) > 4:
-            print('Ошибка, число должно быть 4-х значным')
-            number = input(colored('Введите число ', 'blue'))
-            number = list(number)
         if number[0] == '0':
             print('Ошибка, число не должно начинаться с 0')
             number = input(colored('Введите число ', 'blue'))
             number = list(number)
+        if len(number) > 4:
+            print('Ошибка, число должно быть 4-х значным')
+            number = input(colored('Введите число ', 'blue'))
+            number = list(number)
         number_set = set(number)
-        if len(number_set) < 4:
+        if len(number_set) < 4 or len(number) > 4:
             print('Ошибка, число должно состоять из уникальных символов')
             number = input(colored('Введите число ', 'blue'))
             number = list(number)

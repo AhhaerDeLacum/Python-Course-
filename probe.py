@@ -1,4 +1,7 @@
 #1.Числа фибоначи*
+from random import randint
+
+
 def Fibonacci(f1):
     f2 = 1
     print(f1)
@@ -44,3 +47,28 @@ def some_func():
 
 result = some_func()
 print(result)
+
+"""3.17"""
+from tkinter import *
+mainwin = Tk ()
+mainwin.mainloop()
+''' 6.3'''
+# def even_items(iterable):
+#      """Возврат элементов ``iterable`` когда индекс четный"""
+#      values = []
+#      for index, value in enumerate(iterable, start=1):
+#          if not index % 2:
+#              values.append(value)
+#      return values
+# even_items()
+_holder = []
+
+
+def f1():
+    global _holder
+    _holder = []
+    for i in range(5):
+        _holder.append(randint(1, 20))
+    print(_holder)
+f1()
+print(sum(_holder))

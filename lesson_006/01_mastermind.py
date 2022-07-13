@@ -46,6 +46,7 @@
 # Точнее, в этом случае важен принцип единственной ответственности - https://goo.gl/rYb3hT
 from termcolor import cprint, colored
 from mastermind_engine import check_number, pick_a_number, SEQ
+
 number_of_moves = 0
 do_u_want_play_again = ''
 true = True
@@ -53,7 +54,7 @@ while true:
     number_of_moves = 0
     cprint('Загаданное число - {} '.format(pick_a_number()), color='red')  # Вызываем функцию создания числа
     while True:
-        number = input(colored('Введите число ', 'blue'))#1234
+        number = input(colored('Введите число ', 'blue'))  # 1234
         number = list(number)
         if len(number) > 4:
             print('Ошибка, число должно быть 4-х значным')
@@ -68,15 +69,13 @@ while true:
             print('Ошибка, число должно состоять из уникальных символов')
             number = input(colored('Введите число ', 'blue'))
             number = list(number)
-        cprint('Результат{}'.format((check_number(number=number))),'yellow')
-        number_of_moves += 1# проверяем число
+        cprint('Результат{}'.format((check_number(number=number))), 'yellow')
+        number_of_moves += 1  # проверяем число
         if check_number(number) == {'bulls': 4, 'cows': 0}:
-            cprint('Поздравляю! Колличество попыток:{}'.format(number_of_moves),'green')
+            cprint('Поздравляю! Колличество попыток:{}'.format(number_of_moves), 'green')
             do_u_want_play_again = input(colored('Хотите сыграть вновь ? ', "red"))
             if do_u_want_play_again == ('Да') or do_u_want_play_again == ('да'):
                 break
             else:
-                print('До скорого !')
+                cprint('До скорого !', 'magenta')
                 exit()
-
-

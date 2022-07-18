@@ -18,9 +18,47 @@
 # Примеры преобразований:
 #   print(Water(), '+', Air(), '=', Water() + Air())
 #   print(Fire(), '+', Air(), '=', Fire() + Air())
+class ElementResult:
+    def __init__(self, element1, element2):
+        self.element1 = element1
+        self.element2 = element2
+        self.elem_result = None  #########
+        # if element2 != element1:
+        #     self.elem_result = 'Щторм'
+        if (str(element1) == 'Вода' and str(element2) == 'Воздух') or (
+                str(element1) == 'Воздух' and str(element2) == 'Вода'):
+            self.elem_result = 'Шторм'
+
+    def __str__(self):
+        return str(self.elem_result)
 
 
+class Water:
+    def __init__(self):
+        self.element = 'Вода'
 
+    def __str__(self):
+        return str(self.element)  #######################
+
+    def __add__(self, other):
+        return ElementResult(self, other)
+
+
+class Air:
+    def __init__(self):
+        self.element = 'Воздух'
+
+    def __str__(self):
+        return str(self.element)  #######################
+
+
+# class Fire:
+#
+#
+# class Earth:
+
+
+print(Water(), '+', Air(), '=', Water() + Air())
 # Усложненное задание (делать по желанию)
 # Добавить еще элемент в игру.
 # Придумать что будет при сложении существующих элементов с новым.

@@ -28,6 +28,21 @@ class ElementResult:
         if (str(element1) == 'Вода' and str(element2) == 'Воздух') or (
                 str(element1) == 'Воздух' and str(element2) == 'Вода'):
             self.elem_result = 'Шторм'
+        elif (str(element1) == 'Вода' and str(element2) == 'Огонь') or (
+                str(element1) == 'Огонь' and str(element2) == 'Вода'):
+            self.elem_result = 'Пар'
+        elif (str(element1) == 'Вода' and str(element2) == 'Земля') or (
+                str(element1) == 'Земля' and str(element2) == 'Вода'):
+            self.elem_result = 'Грязь'
+        elif (str(element1) == 'Огонь' and str(element2) == 'Воздух') or (
+                str(element1) == 'Воздух' and str(element2) == 'Огонь'):
+            self.elem_result = 'Молния'
+        elif (str(element1) == 'Земля' and str(element2) == 'Воздух') or (
+                str(element1) == 'Воздух' and str(element2) == 'Земля'):
+            self.elem_result = 'Пыль'
+        elif (str(element1) == 'Земля' and str(element2) == 'Огонь') or (
+                str(element1) == 'Огонь' and str(element2) == 'Земля'):
+            self.elem_result = 'Лава'
 
     def __str__(self):
         return str(self.elem_result)

@@ -43,7 +43,8 @@ class ElementResult:
         elif (str(element1) == 'Земля' and str(element2) == 'Огонь') or (
                 str(element1) == 'Огонь' and str(element2) == 'Земля'):
             self.elem_result = 'Лава'
-
+        else:
+            self.elem_result = None
     def __str__(self):
         return str(self.elem_result)
 
@@ -94,6 +95,7 @@ class Earth:
 
 print(Water(), '+', Air(), '=', Water() + Air())
 print(Fire(), '+', Air(), '=', Fire() + Air())
+print(Air(), '+', Fire(), '=', Air() + Fire())
 # Усложненное задание (делать по желанию)
 # Добавить еще элемент в игру.
 # Придумать что будет при сложении существующих элементов с новым.

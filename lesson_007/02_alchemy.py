@@ -23,8 +23,13 @@ class ElementResult:
         self.element1 = element1
         self.element2 = element2
         self.elem_result = None  #########
-        # if element2 != element1:
-        #     self.elem_result = 'Щторм'
+        """
+        Сравнивать лучше через множества set(), т.к занимает меньше места. Важно ! две скобочки после set
+        
+        if set((str(element1), str(element2))) == set(('Вода', 'Воздух')):
+        #     self.elem_result = 'Альтернатива( вернее правильное сравнение двух элементов)' """
+        if element2 != element1:
+            self.elem_result = 'Щторм'
         if (str(element1) == 'Вода' and str(element2) == 'Воздух') or (
                 str(element1) == 'Воздух' and str(element2) == 'Вода'):
             self.elem_result = 'Шторм'

@@ -115,7 +115,7 @@ class Husband(Human):
             self.gaming()
         else:
             self.work()
-        self.house.dirt += 5
+
 
 
 
@@ -154,6 +154,8 @@ class Husband(Human):
         if self.fullness > 10:
             self.hungry()
             self.house.money += 150
+            global n
+            n += 150
             cprint('Заработал 150 монет', color='magenta')
         else:
             cprint('{} слишком голоден, чтобы работать, сытость - {}'.format(self.name, self.fullness), color='red')
@@ -199,10 +201,10 @@ class Wife(Human):
         if self.house.dirt > 90:
             self.happiness -= 10
 
-        if self.fullness <= 10:
-            self.eat()
-        elif self.house.food <= 20:
+        if self.house.food < 60:
             self.shopping()
+        elif self.fullness <= 30:
+            self.eat()
         elif self.happiness <= 20:
             self.buy_fur_coat()
         elif self.house.dirt >= 100:
@@ -223,12 +225,12 @@ class Wife(Human):
         # if rand_food == 0:
         #     rand_food += 1
         if self.fullness > 40:
-            cprint('{} Вместо еды решил поработать, потому что сытость - {}'.format(self.name, self.fullness), color='magenta')
-            self.work()
+            cprint('{} Вместо еды решила купить еду {}, потому что сытость - {}'.format(self.house.food, self.name, self.fullness), color='magenta')
+            self.shopping()
         elif self.fullness > 30:
-            cprint('{} Вместо еды решил поиграть, потому что сытость - {}'.format(self.name, self.fullness),
+            cprint('{} Вместо еды решила убраться дома, потому что сытость - {}'.format(self.name, self.fullness),
                    color='magenta')
-            self.gaming()
+            self.clean_house()
         elif self.house.food > rand_food:
             self.fullness += self.house.food
             self.house.food -= self.house.food
@@ -246,17 +248,21 @@ class Wife(Human):
         # elif self.house.food <= 0:
 
     def shopping(self):
-        if self.fullness > 10:
+        if self.fullness >= 10:
             if self.house.money >= 20:
                 self.house.money -= 20
                 self.house.food += 20
                 self.hungry()
+                cprint('Купила еду за 20 монет. Еды - {}'.format(self.house.food), color='red')
             elif self.house.money >= 10:
                 self.house.money -= 10
                 self.house.food += 10
                 self.hungry()
+                cprint('Купила еду за 10 монет. Еды - {}'.format(self.house.food), color='red')
             else:
                 cprint('Не хватает на еду. Дома только {}'.format(self.house.money), color='red')
+            if self.fullness == 10:
+                self.eat()
         else:
             cprint('{} слишком голодна, чтобы идти в магазин за едой {}'.format(self.name, self.fullness), color='red')
             self.eat()
@@ -267,6 +273,7 @@ class Wife(Human):
                 self.house.money -= 350
                 self.happiness += 60
                 self.hungry()
+                cprint('Купила шубу. Денег осталось - {}'.format(self.house.money), color='red')
             else:
                 cprint('Не хватает на шубу. Дома только {}'.format(self.house.money), color='red')
         else:
@@ -288,19 +295,20 @@ class Wife(Human):
             cprint('{} слишком голодна, чтобы убираться {}'.format(self.name, self.fullness), color='red')
             self.eat()
 
-
+n = 0
 home = House()
 serge = Husband(name='Сережа')
 masha = Wife(name='Маша')
 
 for day in range(365):
-    cprint('================== День {} =================='.format(day), color='red')
+    cprint('================== День {} =================='.format(day), color='yellow')
     serge.act()
     masha.act()
     cprint(serge, color='cyan')
     cprint(masha, color='cyan')
     cprint(home, color='cyan')
-
+    home.dirt += 5
+print('Кол-во заработанных монет за все время', n)
 
 # TODO после реализации первой части - отдать на проверку учителю
 

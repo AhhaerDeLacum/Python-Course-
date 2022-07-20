@@ -102,7 +102,7 @@ class Husband(Human):
             rand_food = randint(10, 20)
             self.house.food -= rand_food
             self.fullness += rand_food
-            cprint('{} поел теперь сытость равна - {}'.format(self.name, self.fullness))
+            cprint('{} поел теперь сытость равна - {}'.format(self.name, self.fullness), color='magenta')
         self.house.food -= self.rand_food
         self.fullness += self.rand_food
 
@@ -110,10 +110,17 @@ class Husband(Human):
         if self.fullness > 10:
             self.hungry()
             self.house.money += 150
+            cprint('Заработал 150 монет', color='magenta')
         else:
             self.eat()
+
     def gaming(self):
-        pass
+        if self.fullness > 10:
+            self. hungry()
+            self.happiness += 20
+            cprint('Поиграл в WoT', color='magenta')
+        else:
+            self.eat()
 
 
 class Wife(Human):

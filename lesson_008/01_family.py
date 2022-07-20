@@ -113,15 +113,26 @@ class Husband(Human):
 
     def eat(self):
         #self.rand_food = randint(1, 30)
+        rand_food = randint(1, 20) #2 >20
+        # if rand_food == 0:
+        #     rand_food += 1
         if self.fullness > 40:
             self.work()
         elif self.fullness > 30:
             self.gaming()
-        elif self.house.food > 20:
-            rand_food = randint(10, 20)
-            self.house.food -= rand_food
-            self.fullness += rand_food
+        elif self.house.food > rand_food:
+            self.fullness += self.house.food
+            self.house.food -= self.house.food
+
             cprint('{} поел теперь сытость равна - {}'.format(self.name, self.fullness), color='magenta')
+        else:
+            if self.house.food <= 0:
+                cprint('Еда закончилась', color='red')
+                #return
+            else:
+                self.house.food -= rand_food
+                self.fullness += rand_food
+                cprint('{} поел теперь сытость равна - {}'.format(self.name, self.fullness), color='magenta')
         #elif self.house.food <= 0:
 
 

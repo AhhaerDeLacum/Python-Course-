@@ -159,7 +159,7 @@ class Husband(Human):
         else:
             self.eat()
 
-Любое действие, кроме "есть", приводит к уменьшению степени сытости на 10 пунктов
+#Любое действие, кроме "есть", приводит к уменьшению степени сытости на 10 пунктов
 # Кушают взрослые максимум по 30 единиц еды, степень сытости растет на 1 пункт за 1 пункт еды.
 # Степень сытости не должна падать ниже 0, иначе чел умрет от голода.
 #
@@ -208,7 +208,19 @@ class Wife(Human):
         # elif self.house.food <= 0:
 
     def shopping(self):
-        pass
+        if self.fullness > 10:
+            if self.house.money >= 20:
+                self.house.money -= 20
+                self.house.food += 20
+                self.hungry()
+            elif self.house.money >= 10:
+                self.house.money -= 10
+                self.house.food += 10
+                self.hungry()
+            else:
+               cprint('Не хватает. Дома только {}'.format(self.house.money), color='red')
+        else:
+            self.eat()
 
     def buy_fur_coat(self):
         pass

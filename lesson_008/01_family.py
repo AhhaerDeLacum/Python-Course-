@@ -90,7 +90,26 @@ class Husband(Human):
         # '{} model {}'.format(self.__class__.__name__, self.model)
 
     def act(self):
-        pass
+        dice = randint(1, 3)
+        if self.fullness <= 0:
+            cprint('{} умерчик ...'.format(self.name), color='red')
+            return
+        elif self.happiness <= 10:
+            cprint('{} умерчик от депрешн ...'.format(self.name), color='red')
+            return
+        if self.fullness <= 10:
+            self.eat()
+        elif self.house.money <= 10:
+            self.work()
+        elif dice == 1:
+            self.eat()
+        elif dice == 2:
+            self.gaming()
+        else:
+            self.work()
+
+
+
 
     def eat(self):
         #self.rand_food = randint(1, 30)
@@ -103,8 +122,9 @@ class Husband(Human):
             self.house.food -= rand_food
             self.fullness += rand_food
             cprint('{} поел теперь сытость равна - {}'.format(self.name, self.fullness), color='magenta')
-        self.house.food -= self.rand_food
-        self.fullness += self.rand_food
+        #elif self.house.food <= 0:
+
+
 
     def work(self):
         if self.fullness > 10:

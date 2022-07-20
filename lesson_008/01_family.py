@@ -3,6 +3,7 @@
 from termcolor import cprint
 from random import randint
 
+
 ######################################################## Часть первая
 #
 # Создать модель жизни небольшой семьи.
@@ -51,20 +52,30 @@ class House:
 
     def __str__(self):
         return 'Осталось денег - {}, еды - {}, степень грязи в доме - {}'.format(self.money, self.food, self.dirt)
-#У людей есть имя, степень сытости (в начале - 30) и степень счастья (в начале - 100).
+
+
+# У людей есть имя, степень сытости (в начале - 30) и степень счастья (в начале - 100).
 #
 # Любое действие, кроме "есть", приводит к уменьшению степени сытости на 10 пунктов
 # Кушают взрослые максимум по 30 единиц еды, степень сытости растет на 1 пункт за 1 пункт еды.
 # Степень сытости не должна падать ниже 0, иначе чел умрет от голода.
-class Human(House):
+class Human:
     def __init__(self, name):
         self.name = name
         self.happiness = 100
         self.fullness = 30
-        self
+        self.house = home
+
+    def hungry(self):
+        self.fullness -= 10
+
+    def depression(self):
+        if self.house.dirt >= 90:
+            self.happiness -= 10
 
     def __str__(self):
-        return '{} по имени {}'.format(self.__class__.__name__, self.name)
+        return '{} по имени {}. Уровень счастья - {}, уровень сытости - {}'.format(self.__class__.__name__, self.name,
+                                                                                   self.happiness, self.fullness)
 
 
 class Husband(Human):
@@ -72,23 +83,35 @@ class Husband(Human):
     def __init__(self, name):
         super().__init__(name=name)
 
-
     def __str__(self):
         return super().__str__()
-        #'{} по имени {}'.format(self.__class__.__name__, self.name)
-        #super().__str__()
-        #'{} model {}'.format(self.__class__.__name__, self.model)
+        # '{} по имени {}'.format(self.__class__.__name__, self.name)
+        # super().__str__()
+        # '{} model {}'.format(self.__class__.__name__, self.model)
 
     def act(self):
         pass
 
     def eat(self):
-        self
-        self.fullness += randint(1, 30)
+        #self.rand_food = randint(1, 30)
+        if self.fullness > 40:
+            self.work()
+        elif self.fullness > 30:
+            self.gaming()
+        elif self.house.food > 20:
+            rand_food = randint(10, 20)
+            self.house.food -= rand_food
+            self.fullness += rand_food
+            cprint('{} поел теперь сытость равна - {}'.format(self.name, self.fullness))
+        self.house.food -= self.rand_food
+        self.fullness += self.rand_food
 
     def work(self):
-        pass
-
+        if self.fullness > 10:
+            self.hungry()
+            self.house.money += 150
+        else:
+            self.eat()
     def gaming(self):
         pass
 
@@ -97,7 +120,6 @@ class Wife(Human):
 
     def __init__(self, name):
         super().__init__(name=name)
-
 
     def __str__(self):
         return super().__str__()
@@ -129,6 +151,7 @@ for day in range(365):
     cprint(serge, color='cyan')
     cprint(masha, color='cyan')
     cprint(home, color='cyan')
+
 
 # TODO после реализации первой части - отдать на проверку учителю
 
@@ -231,7 +254,6 @@ for day in range(365):
     cprint(kolya, color='cyan')
     cprint(murzik, color='cyan')
 
-
 # Усложненное задание (делать по желанию)
 #
 # Сделать из семьи любителей котов - пусть котов будет 3, или даже 5-10.
@@ -253,4 +275,3 @@ for day in range(365):
 #       for salary in range(50, 401, 50):
 #           max_cats = life.experiment(salary)
 #           print(f'При зарплате {salary} максимально можно прокормить {max_cats} котов')
-

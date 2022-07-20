@@ -89,6 +89,8 @@ class Husband(Human):
         # super().__str__()
         # '{} model {}'.format(self.__class__.__name__, self.model)
 
+    # Грязь добавляется каждый день по 5 пунктов, за одну уборку жена может убирать до 100 единиц грязи.
+    # Если в доме грязи больше 90 - у людей падает степень счастья каждый день на 10 пунктов,
     def act(self):
         dice = randint(1, 3)
         if self.fullness <= 0:
@@ -97,16 +99,19 @@ class Husband(Human):
         elif self.happiness <= 10:
             cprint('{} умерчик от депрешн ...'.format(self.name), color='red')
             return
+        if self.house.dirt > 90:
+            self.happiness -= 10
         if self.fullness <= 10:
             self.eat()
         elif self.house.money <= 10:
             self.work()
-        elif dice == 1:
+        if dice == 1:
             self.eat()
         elif dice == 2:
             self.gaming()
         else:
             self.work()
+        self.house.dirt += 5
 
 
 
@@ -128,6 +133,7 @@ class Husband(Human):
         else:
             if self.house.food <= 0:
                 cprint('Еда закончилась', color='red')
+
                 #return
             else:
                 self.house.food -= rand_food

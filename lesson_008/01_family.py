@@ -218,12 +218,20 @@ class Wife(Human):
                 self.house.food += 10
                 self.hungry()
             else:
-               cprint('Не хватает. Дома только {}'.format(self.house.money), color='red')
+               cprint('Не хватает на еду. Дома только {}'.format(self.house.money), color='red')
         else:
             self.eat()
 
     def buy_fur_coat(self):
-        pass
+        if self.fullness > 10:
+            if self.house.money >= 350:
+                self.house.money -= 350
+                self.happiness += 60
+                self.hungry()
+            else:
+                cprint('Не хватает на шубу. Дома только {}'.format(self.house.money), color='red')
+        else:
+            self.eat()
 
     def clean_house(self):
         pass

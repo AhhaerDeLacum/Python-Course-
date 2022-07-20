@@ -101,10 +101,14 @@ class Husband(Human):
             return
         if self.house.dirt > 90:
             self.happiness -= 10
+
         if self.fullness <= 10:
             self.eat()
         elif self.house.money <= 10:
             self.work()
+        elif self.happiness <= 20:
+            self.gaming()
+
         if dice == 1:
             self.eat()
         elif dice == 2:
@@ -185,7 +189,33 @@ class Wife(Human):
         return super().__str__()
 
     def act(self):
-        pass
+        dice = randint(1, 4)
+        if self.fullness <= 0:
+            cprint('{} сделала умерчик ...'.format(self.name), color='red')
+            return
+        elif self.happiness <= 10:
+            cprint('{} совершила умерчик от депрешн ...'.format(self.name), color='red')
+            return
+        if self.house.dirt > 90:
+            self.happiness -= 10
+
+        if self.fullness <= 10:
+            self.eat()
+        elif self.house.food <= 20:
+            self.shopping()
+        elif self.happiness <= 20:
+            self.buy_fur_coat()
+        elif self.house.dirt >= 100:
+            self.clean_house()
+
+        if dice == 1:
+            self.eat()
+        elif dice == 2:
+            self.shopping()
+        elif dice == 3:
+            self.buy_fur_coat()
+        else:
+            self.clean_house()
 
     def eat(self):
         # self.rand_food = randint(1, 30)

@@ -122,13 +122,16 @@ class Husband(Human):
         # if rand_food == 0:
         #     rand_food += 1
         if self.fullness > 40:
+            cprint('{} Вместо еды решил поработать, потому что сытость - {}'.format(self.name, self.fullness),
+                   color='magenta')
             self.work()
         elif self.fullness > 30:
+            cprint('{} Вместо еды решил поиграть, потому что сытость - {}'.format(self.name, self.fullness),
+                   color='magenta')
             self.gaming()
         elif self.house.food > rand_food:
             self.fullness += self.house.food
             self.house.food -= self.house.food
-
             cprint('{} поел теперь сытость равна - {}'.format(self.name, self.fullness), color='magenta')
         else:
             if self.house.food <= 0:
@@ -149,14 +152,16 @@ class Husband(Human):
             self.house.money += 150
             cprint('Заработал 150 монет', color='magenta')
         else:
+            cprint('{} слишком голоден, чтобы работать, сытость - {}'.format(self.name, self.fullness), color='red')
             self.eat()
 
     def gaming(self):
         if self.fullness > 10:
-            self. hungry()
+            self.hungry()
             self.happiness += 20
             cprint('Поиграл в WoT', color='magenta')
         else:
+            cprint('{} слишком голоден, чтобы играть в WoT, сытость - {}'.format(self.name, self.fullness), color='red')
             self.eat()
 
 #Любое действие, кроме "есть", приводит к уменьшению степени сытости на 10 пунктов
@@ -188,8 +193,11 @@ class Wife(Human):
         # if rand_food == 0:
         #     rand_food += 1
         if self.fullness > 40:
+            cprint('{} Вместо еды решил поработать, потому что сытость - {}'.format(self.name, self.fullness), color='magenta')
             self.work()
         elif self.fullness > 30:
+            cprint('{} Вместо еды решил поиграть, потому что сытость - {}'.format(self.name, self.fullness),
+                   color='magenta')
             self.gaming()
         elif self.house.food > rand_food:
             self.fullness += self.house.food
@@ -218,8 +226,9 @@ class Wife(Human):
                 self.house.food += 10
                 self.hungry()
             else:
-               cprint('Не хватает на еду. Дома только {}'.format(self.house.money), color='red')
+                cprint('Не хватает на еду. Дома только {}'.format(self.house.money), color='red')
         else:
+            cprint('{} слишком голодна, чтобы идти в магазин за едой {}'.format(self.name, self.fullness), color='red')
             self.eat()
 
     def buy_fur_coat(self):
@@ -231,10 +240,23 @@ class Wife(Human):
             else:
                 cprint('Не хватает на шубу. Дома только {}'.format(self.house.money), color='red')
         else:
+            cprint('{} слишком голодна, чтобы идти в магазин за шубой {}'.format(self.name, self.fullness), color='red')
             self.eat()
 
+
     def clean_house(self):
-        pass
+        if self.fullness > 10:# 80 > 100
+            if self.house.dirt >= 100:
+                self.house.dirt -= 100
+                self.hungry()
+                cprint('{} убрала квартиру. Уровень чистоты {}'.format(self.name, self.house.dirt), color='red')
+            else:
+                self.house.dirt -= self.house.dirt
+                self.hungry()
+                cprint('{} убрала квартиру. Уровень чистоты {}'.format(self.name, self.house.dirt), color='red')
+        else:
+            cprint('{} слишком голодна, чтобы убираться {}'.format(self.name, self.fullness), color='red')
+            self.eat()
 
 
 home = House()

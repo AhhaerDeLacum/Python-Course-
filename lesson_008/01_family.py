@@ -154,8 +154,8 @@ class Husband(Human):
         if self.fullness > 10:
             self.hungry()
             self.house.money += 150
-            global n
-            n += 150
+            global money_earned
+            money_earned += 150
             cprint('Заработал 150 монет', color='magenta')
         else:
             cprint('{} слишком голоден, чтобы работать, сытость - {}'.format(self.name, self.fullness), color='red')
@@ -268,11 +268,13 @@ class Wife(Human):
             self.eat()
 
     def buy_fur_coat(self):
+        global all_fur_coat
         if self.fullness > 10:
             if self.house.money >= 350:
                 self.house.money -= 350
                 self.happiness += 60
                 self.hungry()
+                all_fur_coat += 1
                 cprint('Купила шубу. Денег осталось - {}'.format(self.house.money), color='red')
             else:
                 cprint('Не хватает на шубу. Дома только {}'.format(self.house.money), color='red')
@@ -295,7 +297,8 @@ class Wife(Human):
             cprint('{} слишком голодна, чтобы убираться {}'.format(self.name, self.fullness), color='red')
             self.eat()
 
-n = 0
+money_earned = 0
+all_fur_coat = 0
 home = House()
 serge = Husband(name='Сережа')
 masha = Wife(name='Маша')
@@ -308,7 +311,8 @@ for day in range(365):
     cprint(masha, color='cyan')
     cprint(home, color='cyan')
     home.dirt += 5
-print('Кол-во заработанных монет за все время', n)
+print('Кол-во заработанных монет за все время', money_earned)
+print('Шубы', all_fur_coat)
 
 # TODO после реализации первой части - отдать на проверку учителю
 

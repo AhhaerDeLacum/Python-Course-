@@ -26,6 +26,7 @@ class Counting:
     def __init__(self, file_name):
         self.file_name = file_name
         self.stat = {}
+        self.all_symbols = 0
     #обработать файл
     #затем вычисления ( подсчет )
     #вывод
@@ -39,7 +40,8 @@ class Counting:
     def _collect_for_line(self, line):
         i = 0
         for char in line:
-            if char.isalpha():                                  # {л:1, б:3}                                                              #  0     1
+            if char.isalpha():
+                self.all_symbols += 1
                 if char in self.stat:
                     self.stat[char] += 1
                 else:
@@ -49,12 +51,17 @@ class Counting:
     def out_file(self):
         txt_border = '+---------+----------+'
         txt_data = '|  буква  | частота  |'
+        txt_conclusion = 'Итого'
         print(f'{txt_border}')
         print(txt_data)
-        for symbol, amount in self.stat.items():
+        print(f'{txt_border}')
+        for symbol, amount in sorted(self.stat.items()):
             print('|{symbol:^9}|{amount:^10}|'.format(symbol=symbol, amount=amount))
         print(txt_border)
-        #pprint(self.stat)
+        print(f'|{txt_conclusion:^9}|{self.all_symbols:^10}|')
+        print(txt_border)
+        # pprint(self.stat)
+        # #pprint(sorted(self.stat))
 
 counting = Counting(file_name='voyna-i-mir.txt')
 counting.open_file()

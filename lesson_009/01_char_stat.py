@@ -37,19 +37,25 @@ class Counting:
                 self._collect_for_line(line=line[:-1]) #Чтобы не учитывался символ перехода на новую строку line[:-1]
 
     def _collect_for_line(self, line):
+        i = 0
         for char in line:
-            if char.isalpha():
-                if self.sequence in self.stat:
-                    if char in self.stat[self.sequence]:
-                        self.stat[self.sequence][char] += 1
+            if char.isalpha():                                  # {л:1, б:3}                                                              #  0     1
+                if char in self.stat:
+                    self.stat[char] += 1
+                else:
+                    self.stat[char] = 1
+                i += 1
+                '''if self.sequence in self.stat:
+                    if char in self.stat:
+                        self.stat[char] += 1
                         ###pprint("1 if", self.stat) ####
                     else:
-                        self.stat[self.sequence][char] = 1
+                        self.stat[char] = 1
                         ####pprint("1 else", self.stat) ######
                 else:
-                    self.stat[self.sequence] = {char: 1}
+                    self.stat[i] = {char: 1}'''
                     #####pprint("2 else", self.stat)  ######
-                self.sequence = self.sequence[1:] + char
+                #self.sequence = self.sequence[1:] + char
             #####pprint("После условий", self.stat)  ######
 
 

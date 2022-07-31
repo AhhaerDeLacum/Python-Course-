@@ -48,24 +48,51 @@ class Counting:
                     self.stat[char] = 1
                 i += 1
 
-    def out_file(self):
+    def out_file(self, sort_type):
         txt_border = '+---------+----------+'
         txt_data = '|  буква  | частота  |'
         txt_conclusion = 'Итого'
         print(f'{txt_border}')
         print(txt_data)
         print(f'{txt_border}')
-        for symbol, amount in sorted(self.stat.items()):
-            print('|{symbol:^9}|{amount:^10}|'.format(symbol=symbol, amount=amount))
+        self._types_of_sorting(sort_type=sort_type)
+        # for symbol, amount in sorted(self.stat.items(), key=lambda item: item[1]):
+        #     print('|{symbol:^9}|{amount:^10}|'.format(symbol=symbol, amount=amount))
         print(txt_border)
         print(f'|{txt_conclusion:^9}|{self.all_symbols:^10}|')
         print(txt_border)
         # pprint(self.stat)
         # #pprint(sorted(self.stat))
 
+    def _types_of_sorting(self, sort_type):
+        '''Сортировка разных видов:
+        - по частоте по возрастанию
+        - по алфавиту по возрастанию
+        - по алфавиту по убыванию'''
+        if sort_type == 1:
+            for symbol, amount in sorted(self.stat.items(), key=lambda item: item[1]):
+                print('|{symbol:^9}|{amount:^10}|'.format(symbol=symbol, amount=amount))
+        elif sort_type == 2:
+            for symbol, amount in sorted(self.stat.items()):
+                print('|{symbol:^9}|{amount:^10}|'.format(symbol=symbol, amount=amount))
+        elif sort_type == 3:
+            for symbol, amount in sorted(self.stat.items(), reverse=True):
+                print('|{symbol:^9}|{amount:^10}|'.format(symbol=symbol, amount=amount))
+        else:
+            print('Неверный номер. Сортировка есть трех видов 1 до 3')
+# >>> dict(sorted(x.items(), key=lambda item: item[1]))
+# {0: 0, 2: 1, 1: 2, 4: 3, 3: 4}
+# dict1 = {1: 1, 2: 9, 3: 4}
+# sorted_tuples = sorted(dict1.items(), key=lambda item: item[1])
+# print(sorted_tuples)  # [(1, 1), (3, 4), (2, 9)]
+# sorted_dict = {k: v for k, v in sorted_tuples}
+
+
 counting = Counting(file_name='voyna-i-mir.txt')
 counting.open_file()
-counting.out_file()
+counting.out_file(sort_type=1)
+counting.out_file(sort_type=2)
+counting.out_file(sort_type=3)
 # После выполнения первого этапа нужно сделать упорядочивание статистики
 #  - по частоте по возрастанию
 #  - по алфавиту по возрастанию

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import time
 # Имеется файл events.txt вида:
 #
 # [2018-05-17 01:55:52.665804] NOK
@@ -19,8 +19,25 @@
 # Входные параметры: файл для анализа, файл результата
 # Требования к коду: он должен быть готовым к расширению функциональности. Делать сразу на классах.
 
-# TODO здесь ваш код
+class ReadingNok:
 
+    def __init__(self, file_name):
+        self.file_name = file_name
+
+    def open_file(self):
+        with open(file=self.file_name, mode='r', encoding='utf8') as file:
+            for line in file:
+                self._collect_for_line(line=line[:-1])
+
+    def _collect_for_line(self, line):
+        event_nok = 'NOK'
+        if event_nok in line:
+            for char in line:
+
+
+
+reading_nok = ReadingNok(file_name='events.txt')
+reading_nok.open_file()
 # После выполнения первого этапа нужно сделать группировку событий
 #  - по часам
 #  - по месяцу

@@ -45,23 +45,16 @@ class Counting:
                 else:
                     self.stat[char] = 1
                 i += 1
-                '''if self.sequence in self.stat:
-                    if char in self.stat:
-                        self.stat[char] += 1
-                        ###pprint("1 if", self.stat) ####
-                    else:
-                        self.stat[char] = 1
-                        ####pprint("1 else", self.stat) ######
-                else:
-                    self.stat[i] = {char: 1}'''
-                    #####pprint("2 else", self.stat)  ######
-                #self.sequence = self.sequence[1:] + char
-            #####pprint("После условий", self.stat)  ######
-
 
     def out_file(self):
-        pprint(self.stat)
-
+        txt_border = '+---------+----------+'
+        txt_data = '|  буква  | частота  |'
+        print(f'{txt_border}')
+        print(txt_data)
+        for symbol, amount in self.stat.items():
+            print('|{symbol:^9}|{amount:^10}|'.format(symbol=symbol, amount=amount))
+        print(txt_border)
+        #pprint(self.stat)
 
 counting = Counting(file_name='voyna-i-mir.txt')
 counting.open_file()
@@ -72,13 +65,3 @@ counting.out_file()
 #  - по алфавиту по убыванию
 # Для этого пригодится шаблон проектирование "Шаблонный метод" см https://goo.gl/Vz4828
 
-# def prepare(self):
-    #     self.totals = {}
-    #     self.stat_for_generate = {}
-    #     for sequence, char_stat in self.stat.items():
-    #         self.totals[sequence] = 0
-    #         self.stat_for_generate[sequence] = []
-    #         for char, count in char_stat.items():
-    #             self.totals[sequence] += count
-    #             self.stat_for_generate[sequence].append([count, char])
-    #             self.stat_for_generate[sequence].sort(reverse=True)

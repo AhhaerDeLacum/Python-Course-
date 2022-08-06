@@ -18,9 +18,6 @@ while True:
     a_number_of_subs = input('Введите число подписок ').split()
     num_list = list(map(int, a_number_of_subs))
     for i, number in enumerate(num_list):
-        # if number == ' ':
-        #     print('///')
-        #     del a_number_of_subs[i]
         if not 1 <= number <= 10 ** 3:
             print('Не входит в диапазон допустимых значений 2 входные данные')
             a_number_of_subs = input('Введите число подписок ').split()

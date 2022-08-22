@@ -18,7 +18,24 @@ import time
 #
 # Входные параметры: файл для анализа, файл результата
 # Требования к коду: он должен быть готовым к расширению функциональности. Делать сразу на классах.
-
+# with open(file_name) as file:
+#     for line in file:
+#         if 'NOK' not in line:
+#             continue
+#
+#         match = pattern_datetime.search(line)
+#         # Проверка, что регулярка смогла найти дату
+#         if match:
+#             date_str = match.group(1)  # Получение даты
+#             date_by_counter[date_str] += 1
+#
+# for k, v in date_by_counter.items():
+#     print(f'[{k}] {v}')
+import re
+from collections import defaultdict
+# [2018-05-17 01:55:52.665804] NOK
+pattern_datetime = re.compile('\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}).+\]')
+date_dictionary_NOK = defaultdict(int) ##########
 class ReadingNok:
 
     def __init__(self, file_name):
@@ -28,12 +45,29 @@ class ReadingNok:
         with open(file=self.file_name, mode='r', encoding='utf8') as file:
             for line in file:
                 self._collect_for_line(line=line[:-1])
+            out_file_name = input('Название файла для сохранения ')
+            self._save_file(out_file_name=out_file_name)
+
+    def _save_file(self, out_file_name=None):
+        if out_file_name is not None:
+            file = open(out_file_name, 'w', encoding='utf8')
+        else:
+            file = None
+        if file:
+            for key, values in date_dictionary_NOK.items():
+                file.write(f'[{key}] {values}\n')
+            file.close()
 
     def _collect_for_line(self, line):
         event_nok = 'NOK'
         if event_nok in line:
-            for char in line:
+            match = pattern_datetime.search(line)
+            if match:
+                date_str = match.group(1)
+                date_dictionary_NOK[date_str] += 1
 
+            # for k, v in date_dictionary_NOK.items():
+            #     print(f'[{k}] {v}')
 
 
 reading_nok = ReadingNok(file_name='events.txt')

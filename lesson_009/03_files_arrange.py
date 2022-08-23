@@ -18,6 +18,35 @@ import os, time, shutil
 # Имена файлов в процессе работы скрипта не менять, год и месяц взять из времени создания файла.
 # Обработчик файлов делать в обьектном стиле - на классах.
 #
+class ScriptSortingByTime:
+    def __init__(self):
+        self.file_time = 0
+
+    def open_dir(self):
+        path = input('Введите путь вашей папки ')
+        if path:
+            path_normalized = os.path.normpath(path)
+            for dirpath, dirnames, filenames in os.walk(path_normalized):
+                print(dirpath, dirnames, filenames)
+
+                for file in filenames:
+                    full_file_path = os.path.join(dirpath, file)
+                    secs = os.path.getmtime(full_file_path)
+                    self.file_time = time.gmtime(secs)
+                    print(self.file_time)
+                    self._make_directory()
+    def _make_directory(self):
+        os.makedirs()
+        if self
+
+# secs = os.path.getmtime(full_file_path)
+#         file_time = time.gmtime(secs)
+#         if file_time[0] == 2013:
+#             # выводим только файлы за 2013 год
+#             print(full_file_path, secs, file_time)
+
+script = ScriptSortingByTime()
+script.open_dir()
 # Файлы для работы взять из архива icons.zip - раззиповать проводником в папку icons перед написанием кода.
 # Имя целевой папки - icons_by_year (тогда она не попадет в коммит)
 #

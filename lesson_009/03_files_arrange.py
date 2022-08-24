@@ -26,6 +26,11 @@ class ScriptSortingByTime:
 
     def open_dir(self):
         path = input('Введите путь вашей папки ')
+        folder = input('Введите путь, по которому хотите расположить вашу папку ')
+        folder_normalized = os.path.normpath(folder)
+        os.mkdir(folder_normalized)
+        os.chdir(folder_normalized)
+
         if path:
             path_normalized = os.path.normpath(path)
             for dirpath, dirnames, filenames in os.walk(path_normalized):

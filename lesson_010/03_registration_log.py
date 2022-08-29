@@ -22,13 +22,36 @@
 # - поле возраст НЕ является числом от 10 до 99: ValueError
 # Вызов метода обернуть в try-except.
 def check_file(line):
-    for name, email, age in line.split(' '):
-
-with open('registrations.txt', mode= 'w+', encoding='utf8') as file_registrations:
+    name, email, age = line.split(' ')
+    age = int(age)
+    if name.isdigit():
+        raise BaseException('NotNameError')
+    elif not ('@' or '.') in email:
+        raise BaseException('NotEmailError')
+    elif not 10 <= age <= 99:
+        raise ValueError
+    else:
+        # with open('registrations_good.log', mode='w', encoding='utf8') as log_good:
+        #     log_good.write(f'{line}\n')
+        log_good = open('registrations_good.log', 'a', encoding='utf8')
+        log_good.write(f'{line}\n')
+        log_good.close()
+########### Чекнуть инфу по поводу записи в файлы
+    # elif:
+    #     raise ValueError
+    ##return line
+with open('registrations.txt', mode='r', encoding='utf8') as file_registrations:
     for line in file_registrations:
-        line[:-1]
+        line = line[:-1]
         try:
             check_file(line)
-        except
+            ###ЗАПИСЬ
+        except ValueError as exc:
+            # if 'unpack' in exc.args[0]:
+            #     print(f'Не хватает операндов {exc.args}')
+            # else:
+            print(f'Не могу преобразовать к целому числу {exc} в строке {line}')
+        except BaseException as exc:
+            print(f'Исключение типа {exc.args}')
 
 

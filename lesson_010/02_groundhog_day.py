@@ -27,31 +27,53 @@ def one_day():
             raise BaseException('IamGodError')
         except BaseException as exc:
             print(f'Исключение типа {exc.args}')
-    if dice_random == 2:
+            file_log = open('file_log.txt', mode='a', encoding='utf8')
+            file_log.write(f'{exc.args}\n')
+            file_log.close()
+    elif dice_random == 2:
         try:
             raise BaseException('DrunkError')
         except BaseException as exc:
             print(f'Исключение типа {exc.args}')
-    if dice_random == 3:
+            file_log = open('file_log.txt', mode='a', encoding='utf8')
+            file_log.write(f'{exc.args}\n')
+            file_log.close()
+    elif dice_random == 3:
         try:
             raise BaseException('CarCrashError')
         except BaseException as exc:
             print(f'Исключение типа {exc.args}')
-    if dice_random == 4:
+            file_log = open('file_log.txt', mode='a', encoding='utf8')
+            file_log.write(f'{exc.args}\n')
+            file_log.close()
+    elif dice_random == 4:
         try:
             raise BaseException('GluttonyError')
         except BaseException as exc:
             print(f'Исключение типа {exc.args}')
-    if dice_random == 5:
+            file_log = open('file_log.txt', mode='a', encoding='utf8')
+            file_log.write(f'{exc.args}\n')
+            file_log.close()
+    elif dice_random == 5:
         try:
             raise BaseException('DepressionError')
         except BaseException as exc:
             print(f'Исключение типа {exc.args}')
-    if dice_random == 6:
+            file_log = open('file_log.txt', mode='a', encoding='utf8')
+            file_log.write(f'{exc.args}\n')
+            file_log.close()
+    elif dice_random == 6:
         try:
             raise BaseException('SuicideError')
         except BaseException as exc:
             print(f'Исключение типа {exc.args}')
+            file_log = open('file_log.txt', mode='a', encoding='utf8')
+            file_log.write(f'{exc.args}\n')
+            file_log.close()
+    # exc_log = f'{exc.args}\n'
+    # if dice_random <= 6:
+    #     file_log = open('file_log.txt', mode='a', encoding='utf8')
+    #     file_log.write(exc_log)
     return dice_random_carma
 
 

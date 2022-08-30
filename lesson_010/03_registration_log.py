@@ -24,12 +24,15 @@
 def check_file(line):
     name, email, age = line.split(' ')
     age = int(age)
-    if name.isdigit():
+    if name is None or email is None or age is None:
+        raise ValueError('ValueError')
+    elif not name.isalpha():
         raise BaseException('NotNameError')
     elif not ('@' or '.') in email:
         raise BaseException('NotEmailError')
     elif not 10 <= age <= 99:
-        raise ValueError
+        raise ValueError('ValueError')
+
     else:
         # with open('registrations_good.log', mode='w', encoding='utf8') as log_good:
         #     log_good.write(f'{line}\n')
@@ -40,18 +43,33 @@ def check_file(line):
     # elif:
     #     raise ValueError
     ##return line
+counter = 0
 with open('registrations.txt', mode='r', encoding='utf8') as file_registrations:
     for line in file_registrations:
+        counter += 1
         line = line[:-1]
         try:
             check_file(line)
             ###ЗАПИСЬ
         except ValueError as exc:
-            # if 'unpack' in exc.args[0]:
-            #     print(f'Не хватает операндов {exc.args}')
-            # else:
-            print(f'Не могу преобразовать к целому числу {exc} в строке {line}')
+            if 'unpack' in exc.args[0]:
+                print(f'Не хватает операндов {exc.args}')
+                log_bad = open('registrations_bad.log', 'a', encoding='utf8')
+                log_bad.write(f'{counter} {line} - {exc.args}\n') #(Не присутствуют все три поля)
+                log_bad.close()
+            else:
+                print(f'Не входит в возрастные рамки {exc} в строке {line}')
+                log_bad = open('registrations_bad.log', 'a', encoding='utf8')
+                log_bad.write(f'{counter} {line} - {exc.args}\n')
+                log_bad.close()
         except BaseException as exc:
             print(f'Исключение типа {exc.args}')
-
+            log_bad = open('registrations_bad.log', 'a', encoding='utf8')
+            log_bad.write(f'{counter} {line} - {exc.args}\n')
+            log_bad.close()
+        # except BaseException as exc:
+        #     print(f'Исключение типа {exc.args}')
+        #     log_bad = open('registrations_bad.log', 'a', encoding='utf8')
+        #     log_bad.write(f'{line} - {exc.args}\n ')
+        #     log_bad.close()
 

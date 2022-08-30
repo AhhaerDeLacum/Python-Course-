@@ -21,6 +21,9 @@
 # - поле емейл НЕ содержит @ и .(точку): NotEmailError (кастомное исключение)
 # - поле возраст НЕ является числом от 10 до 99: ValueError
 # Вызов метода обернуть в try-except.
+import os.path
+
+
 def check_file(line):
     name, email, age = line.split(' ')
     age = int(age)
@@ -39,11 +42,19 @@ def check_file(line):
         log_good = open('registrations_good.log', 'a', encoding='utf8')
         log_good.write(f'{line}\n')
         log_good.close()
-########### Чекнуть инфу по поводу записи в файлы
-    # elif:
-    #     raise ValueError
-    ##return line
+
+
 counter = 0
+# log_good_is_exist = os.path.exists('registrations_good.log')
+# log_bad_is_exist = os.path.exists('registrations_bad.log')
+# if log_good_is_exist == True and log_bad_is_exist == True:
+#     log_good_is_exist = os.path.
+if os.path.isfile('registrations_good.log') and os.path.isfile('registrations_bad.log'):
+    os.remove('registrations_good.log')
+    os.remove('registrations_bad.log')
+    print("success")
+else:
+    print("Files doesn't exists!")
 with open('registrations.txt', mode='r', encoding='utf8') as file_registrations:
     for line in file_registrations:
         counter += 1
@@ -55,7 +66,7 @@ with open('registrations.txt', mode='r', encoding='utf8') as file_registrations:
             if 'unpack' in exc.args[0]:
                 print(f'Не хватает операндов {exc.args}')
                 log_bad = open('registrations_bad.log', 'a', encoding='utf8')
-                log_bad.write(f'{counter} {line} - {exc.args}\n') #(Не присутствуют все три поля)
+                log_bad.write(f'{counter} {line} - {exc.args}\n')  # (Не присутствуют все три поля)
                 log_bad.close()
             else:
                 print(f'Не входит в возрастные рамки {exc} в строке {line}')
@@ -72,4 +83,3 @@ with open('registrations.txt', mode='r', encoding='utf8') as file_registrations:
         #     log_bad = open('registrations_bad.log', 'a', encoding='utf8')
         #     log_bad.write(f'{line} - {exc.args}\n ')
         #     log_bad.close()
-

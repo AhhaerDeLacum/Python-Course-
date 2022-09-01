@@ -88,11 +88,27 @@ for number in prime_number_iterator:
     print(number)
 
 
-# TODO после подтверждения части 1 преподователем, можно делать
 # Часть 2
 # Теперь нужно создать генератор, который выдает последовательность простых чисел до n
 # Распечатать все простые числа до 10000 в столбик
+""" Интересный способ создания генератора натуральных чисел, нашел альтернативные решения
+def is_prime(num):
+    if num == 2: return True
+    if num % 2 == 0: return False
+    for _ in range(3, num // 2, 2):
+        if num % _ == 0:
+            return False
+    return True
 
+def primes():
+    num = 2
+    while True:
+        if is_prime(num):
+            yield num
+        num += 1
+
+print(list(itertools.takewhile(lambda x : x <= 10000, primes())))
+"""
 
 def prime_numbers_generator(n):
     prime_numbers = []

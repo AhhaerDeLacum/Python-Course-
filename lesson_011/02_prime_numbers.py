@@ -165,9 +165,10 @@ def prime_numbers_generator(n):
                 break
         else:
             prime_numbers.append(number)
-            #yield number ЕСЛИ ЗАКОМЕНИТЬ ДВЕ НИЖНИЕ СТРОКИ И РАССКОМЕНТИТЬ ЭТУ, ТО ПОЛУЧАТСЯ ВСЕ НАТУРАЛЬНЫЕ ЧИСЛА
-            if numbers_generator(number):
-                yield number
+            yield number # ЕСЛИ ЗАКОМЕНИТЬ ДВЕ НИЖНИЕ СТРОКИ И РАССКОМЕНТИТЬ ЭТУ, ТО ПОЛУЧАТСЯ ВСЕ НАТУРАЛЬНЫЕ ЧИСЛА
+            # А так выводит только числа под фильтр
+            # if numbers_generator(number):
+            #     yield number
 
 
 for number in prime_numbers_generator(n=10000):

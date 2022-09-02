@@ -29,8 +29,8 @@ import time
 #             date_str = match.group(1)  # Получение даты
 #             date_by_counter[date_str] += 1
 #
-# for k, v in date_by_counter.items():
-#     print(f'[{k}] {v}')
+# for bend, v in date_by_counter.items():
+#     print(f'[{bend}] {v}')
 import re
 from collections import defaultdict
 # [2018-05-17 01:55:52.665804] NOK
@@ -50,7 +50,7 @@ class ReadingNok:
 
     def _save_file(self, out_file_name=None):
         if out_file_name is not None:
-            file = open(out_file_name, 'w', encoding='utf8')
+            file = open(out_file_name, mode='w+', encoding='utf8')
         else:
             file = None
         if file:
@@ -66,8 +66,8 @@ class ReadingNok:
                 date_str = match.group(1)
                 date_dictionary_NOK[date_str] += 1
 
-            # for k, v in date_dictionary_NOK.items():
-            #     print(f'[{k}] {v}')
+            # for bend, v in date_dictionary_NOK.items():
+            #     print(f'[{bend}] {v}')
 
 
 reading_nok = ReadingNok(file_name='events.txt')

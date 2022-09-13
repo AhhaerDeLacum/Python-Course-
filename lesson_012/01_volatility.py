@@ -73,19 +73,57 @@
 #     def run(self):
 #         <обработка данных>
 import os
+from collections import defaultdict
 
-class FileOpenForCalculatingVolatility():
+class FilesOpenForCalculatingVolatility():
 
-    def __init__(self):
-        pass
+    def __init__(self, path_name):
+        self.file_name = None
+        self.path_name = os.path.normpath(path_name)
+        self.full_file_path = None
+        self.max_price = None
+        self.min_price = None
 
     def run(self):
         pass
 
-    def open(self):
-        pass
+    def opendir(self):
+        if self.path_name:
+            for dirpath, dirnames, filenames in os.walk(self.path_name):
+                print(dirpath, dirnames, filenames)
+                for file in filenames:
+                    self.file = file # не уверен в надобности
+                    self.full_file_path = os.path.join(dirpath, self.file)
+                    self._open()
 
-    def calculating(self):
-        pass
 
 
+    def _open(self):
+        print('###' * 10)
+        self.ticker_dict = defaultdict(int) ###########
+        is_it_first_line = True
+        with open(self.full_file_path, mode='r', encoding='utf8') as file:
+            for line in file:
+                if is_it_first_line:
+                    is_it_first_line = False
+                else:
+                    line = line[:-1]
+                    print(line) #######################
+                    SECID, TRADETIME, PRICE, QUANTITY = line.split(',')
+                    self._calculating(PRICE)
+            self.max_price = 0
+            self.min_price = 0
+
+    def _calculating(self, PRICE):
+        PRICE = float(PRICE)
+        if self.min_price is None or self.max_price is None:
+            self.min_price = PRICE
+            self.max_price = PRICE
+        elif self.min_price > PRICE:
+            self.min_price = PRICE
+        elif self.max_price < PRICE:
+            self.max_price = PRICE
+        print(PRICE)
+
+calculating_files = FilesOpenForCalculatingVolatility(path_name="trades")
+calculating_files.opendir()

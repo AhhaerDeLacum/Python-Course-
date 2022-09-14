@@ -36,8 +36,8 @@ class FilesOpenForCalculatingVolatility(Thread):
         self.full_file_path = None
         self.max_price = None
         self.min_price = None
-        self.average_price = 0 ######
-        self.volatility = 0 ########
+        self.average_price = 0  ######
+        self.volatility = 0  ########
         self.list_volatility = []
         self.list_zero_volatility = []
 
@@ -45,24 +45,22 @@ class FilesOpenForCalculatingVolatility(Thread):
         try:
             self.opendir()
             self.list_volatility.sort()
-            #self.list_zero_volatility.sort()
+            # self.list_zero_volatility.sort()
         except Exception as exc:
             print(exc)
 
     def opendir(self):
         if self.path_name:
             for dirpath, dirnames, filenames in os.walk(self.path_name):
-                #print(dirpath, dirnames, filenames) &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+                # print(dirpath, dirnames, filenames) &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
                 for file in filenames:
-                    self.file = file # не уверен в надобности
+                    self.file = file  # не уверен в надобности
                     self.full_file_path = os.path.join(dirpath, self.file)
                     self._open()
 
-
-
     def _open(self):
-        #print('###' * 10)
-        self.ticker_dict = defaultdict(int) ###########
+        # print('###' * 10)
+        self.ticker_dict = defaultdict(int)  ###########
         is_it_first_line = True
         with open(self.full_file_path, mode='r', encoding='utf8') as file:
             for line in file:
@@ -70,14 +68,12 @@ class FilesOpenForCalculatingVolatility(Thread):
                     is_it_first_line = False
                 else:
                     line = line[:-1]
-                    #print(line) #######################
+                    # print(line) #######################
                     self.SECID, TRADETIME, PRICE, QUANTITY = line.split(',')
                     self._identification_min_and_max(PRICE)
-            #print('open _calculating') &&&&&&&&&&&
-            #time.sleep(2) &&&&&&&&&&&&&&&&&&&&&
+            # print('open _calculating') &&&&&&&&&&&
+            # time.sleep(2) &&&&&&&&&&&&&&&&&&&&&
             self._calculating()
-
-
 
     # Например для бумаги №1:
     #   average_price = (12 + 11) / 2 = 11.5
@@ -88,7 +84,7 @@ class FilesOpenForCalculatingVolatility(Thread):
         self.volatility = round(self.volatility, 2)
         # print(self.min_price)
         # print(self.max_price)
-        #print(f'{self.volatility}%') %%%%%%%%%%%%%%%%%%%%%%%%
+        # print(f'{self.volatility}%') %%%%%%%%%%%%%%%%%%%%%%%%
         # time.sleep(2)
         if self.volatility == 0:
             self.list_zero_volatility.append(self.SECID)
@@ -96,7 +92,7 @@ class FilesOpenForCalculatingVolatility(Thread):
             self.list_volatility.append((self.volatility, self.SECID))
         self.max_price = None
         self.min_price = None
-        #print(self.list_volatility) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        # print(self.list_volatility) ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         # print(self.min_price)
         # print(self.max_price)
         # print(f'{self.volatility}%')
@@ -110,7 +106,7 @@ class FilesOpenForCalculatingVolatility(Thread):
             self.min_price = PRICE
         elif self.max_price < PRICE:
             self.max_price = PRICE
-        #print(PRICE) #####################
+        # print(PRICE) #####################
 
     def time_track(func):
         def surrogate(*args, **kwargs):
@@ -124,6 +120,7 @@ class FilesOpenForCalculatingVolatility(Thread):
             return result
 
         return surrogate
+
 
 def main():
     calculating_files = FilesOpenForCalculatingVolatility(path_name="trades")
@@ -141,7 +138,6 @@ def main():
     result = [x for x in calculating_files.list_zero_volatility]
     print(result)
 
+
 if __name__ == '__main__':
     main()
-
-

@@ -22,10 +22,15 @@
 import os
 import time
 from collections import defaultdict
+from threading import Thread
 
-class FilesOpenForCalculatingVolatility():
+from lesson_012.python_snippets.utils import time_track
 
-    def __init__(self, path_name):
+
+class FilesOpenForCalculatingVolatility(Thread):
+
+    def __init__(self, path_name, *args, **kwargs):
+        super(FilesOpenForCalculatingVolatility, self).__init__(*args, **kwargs)
         self.file_name = None
         self.path_name = os.path.normpath(path_name)
         self.full_file_path = None
@@ -107,15 +112,36 @@ class FilesOpenForCalculatingVolatility():
             self.max_price = PRICE
         #print(PRICE) #####################
 
-calculating_files = FilesOpenForCalculatingVolatility(path_name="trades")
-calculating_files.run()
-print('Максимальная волатильность:')
-for max_v in calculating_files.list_volatility[:-4:-1]:
-    print(max_v)
-print('Минимальная волатильность:')
-for min_v in calculating_files.list_volatility[2::-1]:
-    print(min_v)
-print('Нулевая волатильность:')
+    def time_track(func):
+        def surrogate(*args, **kwargs):
+            started_at = time.time()
 
-result = [x for x in calculating_files.list_zero_volatility]
-print(result)
+            result = func(*args, **kwargs)
+
+            ended_at = time.time()
+            elapsed = round(ended_at - started_at, 6)
+            print(f'Функция {func.__name__} работала {elapsed} секунд(ы)', )
+            return result
+
+        return surrogate
+
+def main():
+    calculating_files = FilesOpenForCalculatingVolatility(path_name="trades")
+    calculating_files.start()
+    calculating_files.join()
+
+    print('Максимальная волатильность:')
+    for max_v in calculating_files.list_volatility[:-4:-1]:
+        print(max_v)
+    print('Минимальная волатильность:')
+    for min_v in calculating_files.list_volatility[2::-1]:
+        print(min_v)
+    print('Нулевая волатильность:')
+
+    result = [x for x in calculating_files.list_zero_volatility]
+    print(result)
+
+if __name__ == '__main__':
+    main()
+
+

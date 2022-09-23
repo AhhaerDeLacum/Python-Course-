@@ -59,7 +59,7 @@ class DungeonAndDragons:
         self.remaining_time = remaining_time
         self.location = None
         self.file = filename
-        self.json_list = None ########### кол-во элементов и лист словарей
+        self.list = None ########### кол-во элементов и лист словарей
         self.number_of_jsonlist = None
 
     def game_progress(self):
@@ -69,19 +69,37 @@ class DungeonAndDragons:
 
     def file_open(self):
         with open(file=self.file, mode="r", encoding="utf8") as json_file:
-            self.json_list = json.load(json_file)
-            self.number_of_jsonlist = len(self.json_list)
+            json_list = json.load(json_file)
+            self.list = []
+            self.list.append(json_list)
+            self.number_of_jsonlist = len(self.list)
 
     def enter_the_dungeon(self):
         for number in range(self.number_of_jsonlist):
-            print
-        print(self.json_list)
-        print(self.json_list['Location_0_tm0'])
-        print(len(self.json_list['Location_0_tm0']))
-        print(self.json_list['Location_0_tm0'][0])
-        print(self.json_list['Location_0_tm0'][1])
-        print(self.json_list['Location_0_tm0'][2])
+            print(self.list[number]) ##############
+            a = self.list[number]
+            # k = self.list[number].keys()
+            # print(k)
 
+            for key, values in a.items():
+                print(f'Вы находитесь в {key}')
+                l = len(values)
+                print('Внутри вы видите:')
+                for k in range(l):
+                    if 'exp' in a[key][k]:
+                        print('-- Монстра', a[key][k])
+                    else:
+                        for location, _ in a[key][k].items():
+                            print(f'-- Вход в локацию: {location}' )
+                    # print('Локация', a[key][k])
+
+            # print(self.list['Location_0_tm0'])
+            # print(len(self.list['Location_0_tm0']))
+            # print(self.list['Location_0_tm0'][0])
+            # print(self.list['Location_0_tm0'][1])
+            # print(self.list['Location_0_tm0'][2])
+    def action(self):
+        pass
 
 
 

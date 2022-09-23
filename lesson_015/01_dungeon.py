@@ -65,7 +65,11 @@ class DungeonAndDragons:
     def game_progress(self):
         self.file_open()
         #Условие вероятно надо
-        self.enter_the_dungeon()
+        i = 3
+        while i != 0:
+            i -= 1
+            self.enter_the_dungeon()
+            self.action()
 
     def file_open(self):
         with open(file=self.file, mode="r", encoding="utf8") as json_file:
@@ -77,22 +81,25 @@ class DungeonAndDragons:
     def enter_the_dungeon(self):
         for number in range(self.number_of_jsonlist):
             print(self.list[number]) ##############
-            a = self.list[number]
+            self.list_ = self.list[number]
             # k = self.list[number].keys()
             # print(k)
 
-            for key, values in a.items():
+            for key, values in self.list_.items():
                 print(f'Вы находитесь в {key}')
                 l = len(values)
                 print('Внутри вы видите:')
                 for k in range(l):
-                    if 'exp' in a[key][k]:
-                        print('-- Монстра', a[key][k])
+                    if 'exp' in self.list_[key][k]:
+                        print('-- Монстра', self.list_[key][k])
                     else:
-                        for location, _ in a[key][k].items():
+                        for location, _ in self.list_[key][k].items():
                             print(f'-- Вход в локацию: {location}' )
-                    # print('Локация', a[key][k])
-
+                    # print('Локация', fffa[key][k])
+""" основная идея: нужно внутри метода enter_the_dungeon в конце сохранять значение локации и возможно монстров в
+список новый self.(создать) и из него или же реализовать переход в методе game_progress в метод action() и потом 
+менять вывод экрана, когда убит монстр и прочее ....
+"""
             # print(self.list['Location_0_tm0'])
             # print(len(self.list['Location_0_tm0']))
             # print(self.list['Location_0_tm0'][0])

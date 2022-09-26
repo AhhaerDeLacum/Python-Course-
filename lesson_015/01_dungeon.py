@@ -61,6 +61,8 @@ class DungeonAndDragons:
         self.file = filename
         self.list = None ########### кол-во элементов и лист словарей
         self.number_of_jsonlist = None
+        self.list_of_location_and_monsters = []
+
 
     def game_progress(self):
         self.file_open()
@@ -75,8 +77,8 @@ class DungeonAndDragons:
         with open(file=self.file, mode="r", encoding="utf8") as json_file:
             json_list = json.load(json_file)
             self.list = []
-            self.list.append(json_list)
-            self.number_of_jsonlist = len(self.list)
+            self.list.append(json_list) ######### это список обновлять локациями!!!!!
+            self.number_of_jsonlist = len(self.list)########
 
     def enter_the_dungeon(self):
         for number in range(self.number_of_jsonlist):
@@ -89,13 +91,46 @@ class DungeonAndDragons:
                 print(f'Вы находитесь в {key}')
                 l = len(values)
                 print('Внутри вы видите:')
-                for k in range(l):
-                    if 'exp' in self.list_[key][k]:
-                        print('-- Монстра', self.list_[key][k])
-                    else:
-                        for location, _ in self.list_[key][k].items():
-                            print(f'-- Вход в локацию: {location}' )
+                if len(self.list_of_location_and_monsters) == 0:
+                    for k in range(l):
+                        if 'exp' in self.list_[key][k]: ## не пустой
+                            self.list_of_location_and_monsters.append(self.list_[key][k])
+                            print(f'-- Монстр {self.list_[key][k]}')
+                        elif 'exp' in self.list_[key][k]:
+                            self.list_of_location_and_monsters.append(self.list_[key][k])
+                            print('-- Монстра', self.list_of_location_and_monsters[k - 1])  #########
+                        else:
+                            if 'Loc' not in self.list_of_location_and_monsters:
+                                for location, _ in self.list_[key][k].items():
+                                    self.list_of_location_and_monsters.append(location)
+                                    print(f'-- Вход в локацию: {location}')
+                else:
+                    for loc_or_mons in self.list_of_location_and_monsters:
+                        if 'exp' in loc_or_mons:
+                            print(f'-- Монстр {loc_or_mons}')
+                        elif 'Loc' in loc_or_mons:
+                            print(f'-- Вход в локацию: {loc_or_mons}')
                     # print('Локация', fffa[key][k])
+    def stats(self):
+        pass
+
+    def action(self):
+        print(self.list_of_location_and_monsters)
+        while True:
+            self.number_of_action = int(input('Введите номер действия'))  ## number_of_action = input('')
+            if self.number_of_action > len(self.list_of_location_and_monsters) or self.number_of_action <= 0:
+                print('Вышли за диапазон номера действий')
+                continue  ## number_of_action = input('')
+            else:
+                break
+        if 'exp' in self.list_of_location_and_monsters[self.number_of_action - 1]:
+            del self.list_of_location_and_monsters[self.number_of_action - 1]
+            self.stats() ########## Нужно учитывать экспу и что время ушло
+            #self.enter_the_dungeon()######
+        elif 'Loc' in self.list_of_location_and_monsters[self.number_of_action - 1]:
+            self.list_of_location_and_monsters = []
+            self.stats()
+
 """ основная идея: нужно внутри метода enter_the_dungeon в конце сохранять значение локации и возможно монстров в
 список новый self.(создать) и из него или же реализовать переход в методе game_progress в метод action() и потом 
 менять вывод экрана, когда убит монстр и прочее ....
@@ -105,8 +140,7 @@ class DungeonAndDragons:
             # print(self.list['Location_0_tm0'][0])
             # print(self.list['Location_0_tm0'][1])
             # print(self.list['Location_0_tm0'][2])
-    def action(self):
-        pass
+
 
 
 

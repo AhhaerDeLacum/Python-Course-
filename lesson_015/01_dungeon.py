@@ -63,6 +63,7 @@ class DungeonAndDragons:
         self.number_of_jsonlist = None
         self.list_of_location_and_monsters = []
         self.dict_of_location = {}
+        self.counter = None
 
     def game_progress(self):
         self.file_open()
@@ -70,8 +71,14 @@ class DungeonAndDragons:
         # i = 3
         while True:
             # i -= 1
+
             self.enter_the_dungeon()
+
             self.action()
+            if self.counter == 0:
+                print('Конец игры')
+                break
+
 
     def file_open(self):
         with open(file=self.file, mode="r", encoding="utf8") as json_file:
@@ -90,34 +97,43 @@ class DungeonAndDragons:
             self.list_ = self.list[number]
             # k = self.list[number].keys()
             # print(k)
+            if isinstance(self.list_, dict):
+                for key, values in self.list_.items():
+                    print(f'Вы находитесь в {key}')
+                    l = len(values)
+                    print('Внутри вы видите:')
+                    if len(self.list_of_location_and_monsters) == 0:
+                        for k in range(l):
+                            if isinstance(self.list_[key][k], list):
+                                for element in self.list_[key][k]:
+                                    self.list_of_location_and_monsters.append(element)
+                                    print(f'-- Монстр {element}')
+                            elif 'exp' in self.list_[key][k]:
+                                self.list_of_location_and_monsters.append(self.list_[key][k])
+                                print(f'-- Монстр {self.list_[key][k]}')
+                              #########
+                            else:
 
-            for key, values in self.list_.items():
-                print(f'Вы находитесь в {key}')
-                l = len(values)
-                print('Внутри вы видите:')
-                if len(self.list_of_location_and_monsters) == 0:
-                    for k in range(l):
-                        if 'exp' in self.list_[key][k]:
-                            self.list_of_location_and_monsters.append(self.list_[key][k])
-                            print(f'-- Монстр {self.list_[key][k]}')
-                          #########
-                        else:
+                                #if 'Loc' not in self.list_of_location_and_monsters:
+                                for location, _ in self.list_[key][k].items():
+                                    self.list_of_location_and_monsters.append(location)
+                                    self.dict_of_location[location] = self.list_[key][k]
+                                    print(f'-- Вход в локацию: {location}')
+                                # print(self.dict_of_location)  #########3
 
-                            #if 'Loc' not in self.list_of_location_and_monsters:
-                            for location, _ in self.list_[key][k].items():
-                                self.list_of_location_and_monsters.append(location)
-                                self.dict_of_location[location] = self.list_[key][k]
-                                print(f'-- Вход в локацию: {location}')
-                            # print(self.dict_of_location)  #########3
+                    else:
+                        counter_loc = 0
+                        counter_mons = len(self.list_of_location_and_monsters) * 2
+                        for loc_or_mons in self.list_of_location_and_monsters:
 
-                else:
-                    for loc_or_mons in self.list_of_location_and_monsters:
-                        if 'exp' in loc_or_mons:
-                            print(f'-- Монстр {loc_or_mons}')
-                        elif 'Loc' in loc_or_mons:
-                            print(f'-- Вход в локацию: {loc_or_mons}')
-                    # print('Локация', fffa[key][k])
-        #self.number_of_jsonlist = len
+                            if 'exp' in loc_or_mons:
+                                print(f'-- Монстр {loc_or_mons}')
+                                counter_mons -= 1
+                            elif 'Loc' in loc_or_mons:
+                                print(f'-- Вход в локацию: {loc_or_mons}')
+                                counter_loc += 1
+                        if counter_loc == 0 and counter_mons == 1:
+                            self.counter = 0
     def stats(self):
         pass
 
@@ -127,7 +143,7 @@ class DungeonAndDragons:
             self.number_of_action = int(input('Введите номер действия'))  ## number_of_action = input('')
             if self.number_of_action > len(self.list_of_location_and_monsters) or self.number_of_action <= 0:
                 print('Вышли за диапазон номера действий')
-                continue  ## number_of_action = input('')
+                continue
             else:
                 break
         if 'exp' in self.list_of_location_and_monsters[self.number_of_action - 1]:
@@ -143,10 +159,18 @@ class DungeonAndDragons:
             self.number_of_jsonlist = len(self.list)
             self.stats()
             self.list_of_location_and_monsters.clear()
+        # elif self.counter == 0:
+        #     del self.list_of_location_and_monsters[self.number_of_action - 1]
+        #     self.stats()
+        #     return
+
 """isinstance(лист для 10 локации, list)"""
 """ основная идея: нужно внутри метода enter_the_dungeon в конце сохранять значение локации и возможно монстров в
 список новый self.(создать) и из него или же реализовать переход в методе game_progress в метод action() и потом 
 менять вывод экрана, когда убит монстр и прочее ....
+__
+( надо учесть, что в конце 10 локации у нас список монстров, а мы перебираем словари через .items(). 
+А также если в локации только монстры и если их уничтожить список станет пустым и снова появятся эти же монстры
 """
             # print(self.list['Location_0_tm0'])
             # print(len(self.list['Location_0_tm0']))

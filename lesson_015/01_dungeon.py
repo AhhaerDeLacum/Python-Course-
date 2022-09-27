@@ -45,6 +45,8 @@
 # 3.Выход
 
 import json
+import time
+from decimal import *
 
 remaining_time = '1234567890.0987654321'
 # если изначально не писать число в виде строки - теряется точность!
@@ -56,7 +58,7 @@ field_names = ['current_location', 'current_experience', 'current_date']
 class DungeonAndDragons:
 
     def __init__(self, remaining_time, filename):
-        self.remaining_time = remaining_time
+        self.remaining_time = Decimal(remaining_time)
         self.location = None
         self.file = filename
         self.list = None ########### кол-во элементов и лист словарей
@@ -163,7 +165,14 @@ class DungeonAndDragons:
         #     del self.list_of_location_and_monsters[self.number_of_action - 1]
         #     self.stats()
         #     return
+        self.time_elapsed()
 
+    def time_elapsed(self):
+        # start = self.remaining_time
+        # elapsed = start - Decimal(time.monotonic())
+        # print(f'Осталось {elapsed} секунд')
+        elapsed = self.remaining_time - Decimal(time.monotonic())
+        print(f'Осталось {elapsed} секунд')
 """isinstance(лист для 10 локации, list)"""
 """ основная идея: нужно внутри метода enter_the_dungeon в конце сохранять значение локации и возможно монстров в
 список новый self.(создать) и из него или же реализовать переход в методе game_progress в метод action() и потом 
@@ -171,6 +180,11 @@ class DungeonAndDragons:
 __
 ( надо учесть, что в конце 10 локации у нас список монстров, а мы перебираем словари через .items(). 
 А также если в локации только монстры и если их уничтожить список станет пустым и снова появятся эти же монстры
+
+Нужно теперь при каждом входе в локацию отнимать используя регулярные выражение время и добавлять экспу
+
+Когда переходим в локацию или убиваем монстра в action() -> переходим в другой метод и передаем в качестве аргумента 
+название локации или монстра, затем с помощью регулярного выражения вычленяем необходимые данные( экспа и время) и т.д 
 """
             # print(self.list['Location_0_tm0'])
             # print(len(self.list['Location_0_tm0']))

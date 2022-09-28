@@ -43,10 +43,11 @@
 # 1.Атаковать монстра
 # 2.Перейти в другую локацию
 # 3.Выход
-
+import csv
 import json
 import time
 from decimal import *
+import re
 
 remaining_time = '1234567890.0987654321'
 # если изначально не писать число в виде строки - теряется точность!
@@ -66,9 +67,19 @@ class DungeonAndDragons:
         self.list_of_location_and_monsters = []
         self.dict_of_location = {}
         self.counter = None
+        self.pattern_exp = r'p\d*'
+        self.pattern_time = r'tm\d*.\d*'
+        self.pattern_location = r'Location_\w\w*'#'Location_10'
+
+        self.exp = 0
+        ### "Можно было бы куда-нибудь вынести"
+        self.list_from_fieldnames = [field_names, ]
+        self.list_with_values = []
 
     def game_progress(self):
         self.file_open()
+        print(f'У вас осталось  {self.remaining_time} секунд')
+        print(f'У вас {self.exp} опыта')
         #Условие вероятно надо
         # i = 3
         while True:
@@ -80,7 +91,11 @@ class DungeonAndDragons:
             if self.counter == 0:
                 print('Конец игры')
                 break
-
+        if self.exp >= 280 and self.remaining_time > 0:
+            print('Ура, победа')
+            self.save_file()
+        else:
+            print('Судьба выбросила d1 и Ужастик настиг вас - вы проиграли, м...пук')
 
     def file_open(self):
         with open(file=self.file, mode="r", encoding="utf8") as json_file:
@@ -88,6 +103,28 @@ class DungeonAndDragons:
             self.list = []
             self.list.append(json_list)######### это список обновлять локациями!!!!!
             self.number_of_jsonlist = len(self.list)########
+        # with open('dungeon.csv', 'a', newline='') as out_file:
+        #     writer = csv.DictWriter(out_file, delimiter=',', fieldnames=self.list_from_fieldnames[0])
+        #     a = {x: y for x, y in zip(field_names, field_names)}
+        #     writer.writerow(a)
+
+    def save_file(self):
+        loc = str(re.findall(self.pattern_location, self.location))[1:-1] # Преобразование названия локации для красивого вывода
+        self.list_with_values = [loc, self.exp, self.remaining_time]
+
+        with open('dungeon.csv', 'w', newline='') as out_file:
+            writer = csv.DictWriter(out_file, delimiter=',', fieldnames=self.list_from_fieldnames[0])
+            line_of_parameters = {x: y for x, y in zip(field_names, field_names)}
+            writer.writerow(line_of_parameters)
+            first_line_names = {x: y for x, y in zip(field_names, self.list_with_values)}
+            writer.writerow(first_line_names)
+
+
+        # one_more_artifact = {'Name': 'the Golden cross of Coronado', 'year of discovery': '1912', 'quantity': '1'}
+        #
+        # with open('1111111.csv', "a", newline='') as out_file:
+        #     writer = csv.DictWriter(out_file, delimiter=',', fieldnames=inventory_of_stash[0])
+        #     writer.writerow(one_more_artifact)
 
     def enter_the_dungeon(self):
         # print(self.number_of_jsonlist)
@@ -102,17 +139,22 @@ class DungeonAndDragons:
             if isinstance(self.list_, dict):
                 for key, values in self.list_.items():
                     print(f'Вы находитесь в {key}')
+                    # print(f'У вас {self.exp} опыта')
+                    # print(f'У вас осталось  {self.remaining_time} секунд')
                     l = len(values)
                     print('Внутри вы видите:')
+                    count = 1
                     if len(self.list_of_location_and_monsters) == 0:
                         for k in range(l):
                             if isinstance(self.list_[key][k], list):
                                 for element in self.list_[key][k]:
                                     self.list_of_location_and_monsters.append(element)
-                                    print(f'-- Монстр {element}')
+                                    print(f'{count}. Убить -- Монстра: {element}')
+                                    count += 1
                             elif 'exp' in self.list_[key][k]:
                                 self.list_of_location_and_monsters.append(self.list_[key][k])
-                                print(f'-- Монстр {self.list_[key][k]}')
+                                print(f'{count}. Убить -- Монстра: {self.list_[key][k]}')
+                                count += 1
                               #########
                             else:
 
@@ -120,8 +162,10 @@ class DungeonAndDragons:
                                 for location, _ in self.list_[key][k].items():
                                     self.list_of_location_and_monsters.append(location)
                                     self.dict_of_location[location] = self.list_[key][k]
-                                    print(f'-- Вход в локацию: {location}')
-                                # print(self.dict_of_location)  #########3
+                                    print(f'{count}. Перейти -- Вход в локацию: {location}')
+                                    count += 1
+                                    self.location = location
+                                    # print(self.dict_of_location)  #########3
 
                     else:
                         counter_loc = 0
@@ -129,50 +173,72 @@ class DungeonAndDragons:
                         for loc_or_mons in self.list_of_location_and_monsters:
 
                             if 'exp' in loc_or_mons:
-                                print(f'-- Монстр {loc_or_mons}')
+                                print(f'{count}. Убить -- Монстра: {loc_or_mons}')
                                 counter_mons -= 1
+                                count += 1
                             elif 'Loc' in loc_or_mons:
-                                print(f'-- Вход в локацию: {loc_or_mons}')
+                                print(f'{count}. Перейти -- Вход в локацию: {loc_or_mons}')
                                 counter_loc += 1
+                                count += 1
                         if counter_loc == 0 and counter_mons == 1:
                             self.counter = 0
+
+                            '''Это для проверки, если будет списко состоящих только из монстров'''
     def stats(self):
         pass
 
     def action(self):
-        # print(self.list_of_location_and_monsters) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # print(self.list_of_location_and_monsters) #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         while True:
-            self.number_of_action = int(input('Введите номер действия'))  ## number_of_action = input('')
-            if self.number_of_action > len(self.list_of_location_and_monsters) or self.number_of_action <= 0:
+            self.number_of_action = int(input('Чтобы выйти из игры нажмите 0\nВведите номер действия: '))
+            print('_______' * 9)## number_of_action = input('')
+            if self.number_of_action > len(self.list_of_location_and_monsters) or self.number_of_action < 0:
                 print('Вышли за диапазон номера действий')
                 continue
+            elif self.number_of_action == 0:
+                self.counter = 0
+                return False
             else:
                 break
-        if 'exp' in self.list_of_location_and_monsters[self.number_of_action - 1]:
-            del self.list_of_location_and_monsters[self.number_of_action - 1]
-            self.stats() ########## Нужно учитывать экспу и что время ушло
+        index = self.number_of_action - 1
+        value_from_index = self.list_of_location_and_monsters[index]
+        if 'exp' in self.list_of_location_and_monsters[index]:
+            self.time_elapsed(value_from_index)
+            del self.list_of_location_and_monsters[index]
+             ########## Нужно учитывать экспу и что время ушло
             #self.enter_the_dungeon()######
-        elif 'Loc' in self.list_of_location_and_monsters[self.number_of_action - 1]:
-            key = self.list_of_location_and_monsters[self.number_of_action - 1]
+        elif 'Loc' in self.list_of_location_and_monsters[index]:
+            key = self.list_of_location_and_monsters[index]
             # self.list_of_location_and_monsters = []
             self.list.clear()
             value = self.dict_of_location[key]
             self.list.append(value) #!@!@!@!@
             self.number_of_jsonlist = len(self.list)
-            self.stats()
+            self.time_elapsed(value_from_index) ####$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
             self.list_of_location_and_monsters.clear()
         # elif self.counter == 0:
         #     del self.list_of_location_and_monsters[self.number_of_action - 1]
         #     self.stats()
         #     return
-        self.time_elapsed()
 
-    def time_elapsed(self):
-        # start = self.remaining_time
-        # elapsed = start - Decimal(time.monotonic())
-        # print(f'Осталось {elapsed} секунд')
-        elapsed = self.remaining_time - Decimal(time.monotonic())
-        print(f'Осталось {elapsed} секунд')
+
+    def time_elapsed(self, value_from_index):
+        # mob_pattern = r'[M]em\w{,2}' #"Mob_exp20_tm167710"
+        # loc_pattern = r'[Nn]em\w{,2}' #"Location_2_tm333000000":
+        time_ = float(str(re.findall(self.pattern_time, value_from_index))[4:-2])
+
+        # loc = re.findall(self.pattern_location, self.location)
+        # print(loc)
+        if 'exp' in value_from_index:
+            exp_ = float(str(re.findall(self.pattern_exp, value_from_index))[3:-2])  # &&&&&???????
+            self.exp += exp_
+        # print(time_)
+        # print(exp_)
+
+        self.remaining_time = Decimal(self.remaining_time) - Decimal(time_)
+        print(f'Осталось {self.remaining_time} секунд')
+        print(f'У вас {self.exp} опыта')
+
 """isinstance(лист для 10 локации, list)"""
 """ основная идея: нужно внутри метода enter_the_dungeon в конце сохранять значение локации и возможно монстров в
 список новый self.(создать) и из него или же реализовать переход в методе game_progress в метод action() и потом 

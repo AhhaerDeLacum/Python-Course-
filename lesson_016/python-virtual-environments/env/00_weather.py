@@ -9,7 +9,7 @@
 # Из источника, которому вы доверяете.
 
 # Для этого вам нужно:
-print(1)
+
 # Создать модуль-движок с классом WeatherMaker, необходимым для получения и формирования предсказаний.
 # В нём должен быть метод, получающий прогноз с выбранного вами сайта (парсинг + re) за некоторый диапазон дат,
 # а затем, получив данные, сформировать их в словарь {погода: Облачная, температура: 10, дата:datetime...}
@@ -50,12 +50,134 @@ print(1)
 # Создать модуль-движок с классом WeatherMaker, необходимым для получения и формирования предсказаний.
 # В нём должен быть метод, получающий прогноз с выбранного вами сайта (парсинг + re) за некоторый диапазон дат,
 # а затем, получив данные, сформировать их в словарь {погода: Облачная, температура: 10, дата:datetime...}
+import codecs
+import sys
 
 import requests
+from bs4 import BeautifulSoup
+import lxml
+###############################response = requests.get("https://yandex.ru/pogoda/")
+# print(response.text.encode(encoding='utf-8'))
+# with open("index.html", 'w', encoding='utf-8', errors='ignore') as file:
+#     file.write(response.text)
+
+#
+# # print(list_of_date)
+# # print(list_of_weather)
+# # print(list_of_temperature_max)
+# # print(list_of_temperature_min)
+# for tag in list_of_date:
+#     print(tag.text)
+
+'''for i in range(len(a)):
+    aria_label = a[i]
+    print(aria_label['aria-label'])
+    if 'aria-label' in aria_label:
+        print(aria_label, '\n')'''
+# all_tabs = soup.find_all(class_="link link_theme_normal text forecast-briefly__day-link i-bem link_js_inited")
+# for i in all_tabs:
+#     print(i)
+# soup.p
+# # <p class="title"><b>The Dormouse's story</b></p>
+# aria-label="вчера, 5 октября, небольшой дождь, днём 8°, ночью 6°"
+
+
+# try:
+#     all_tabs = soup.find_all('a')
+#     for i in all_tabs:
+#         print(i)
+#
+#     soup.get_text()
+#     u'\nI linked to example.com\n'
+#     print(soup.i.get_text())
+#     u'example.com'
+# except BaseException as exc:
+#     print(exc)
+    # i['aria-label']
+# u'title'
+# if response.status_code == 200:
+#     html_doc = BeautifulSoup(response.text.encode(encoding='utf-8'), features='html.parser')
+# list_of_date = soup.find_all('time', {'class': "time forecast-briefly__date"})#html_doc.find_all('a', {'class': 'link link_theme_normal text forecast-briefly__day-link i-bem link_js_inited'})
+# list_of_weather = soup.find_all('div', {'class': 'forecast-briefly__condition'})
+# list_of_temperature_max = soup.find_all('span', {'class': 'temp__value temp__value_with-unit'})
+# list_of_temperature_min = soup.find_all('span', {'class': 'temp__value temp__value_with-unit'})
+#
+#
+# print(list_of_date)
+# print(list_of_weather)
+# print(list_of_temperature_max)
+# print(list_of_temperature_min)
+# for tag in list_of_date:
+#     print(tag.text)
+    # for names, values in zip(list_of_names, list_of_values):
+    #     print(names.text, values.text)
+    # for link in html_doc.find_all('a'):
+    #     print(link.get('href'))
+    # http://example.com/elsie
+    # http://example.com/lacie
+    # http://example.com/tillie
+# Чтобы узнать, какие теги нам нужны, нужно проанализировать саму страницу
+# Для этого можно открыть её в браузере и посмотреть код всей страницы или нужного элемента.
+
+# В нашем случае это теги 'span' и 'a' c атрибутами 'class:...'
+# Пример того, как это выглит внутри документа:
+# <a class="home-link home-link_black_yes inline-stocks__link" href="https://news.yandex.ru/quotes/2002.html"
+# data-statlog="news_rates_manual.id2002" data-statlog-showed="1">USD&nbsp;MOEX</a>
+# with open('index.html', 'r', encoding='utf-8', errors='ignore') as file:
+#     src = file.read()
+# soup = BeautifulSoup(response.text.encode(encoding='utf-8'), features='html.parser') # BeautifulSoup(response.text.encode(encoding='utf-8'), features='html.parser')
+# list_of_date = soup.find_all('div', {'aria-hidden': "true"})
+# print(list_of_date)
+
+# def class_no_id(tag):
+#     return tag.has_attr('aria-hidden') and not tag.has_attr('class')
+# for tag in soup.find_all(class_no_id):
+#     print(tag.text)
+# for i in list_of_date:
+#     print(i)
 
 class WeatherMaker:
     def __init__(self):
+        self.url = "https://yandex.ru/pogoda/"
+        self.dict_of_weather = {
+            'day_of_week': '',
+            'day_with_month': '',
+            'weather': '',
+            'max_temperature': '',
+            'min_temperature': '',
+            'min_temperature': '',
+        }
+
+    def run(self):
+        self.open()
+
+    def open(self):
         pass
+        with open('index.html', 'r', encoding='utf-8', errors='ignore') as file:
+            src = file.read()
+        soup = BeautifulSoup(src, 'html.parser')
+        list_of_date = soup.find_all('time', {'class': "time forecast-briefly__date"})  # html_doc.find_all('a', {'class': 'link link_theme_normal text forecast-briefly__day-link i-bem link_js_inited'})
+        list_of_weather = soup.find_all('div', {'class': 'forecast-briefly__condition'})
+        list_of_temperature_max = soup.find_all('span', {'class': 'temp__value temp__value_with-unit'})
+        list_of_temperature_min = soup.find_all('span', {'class': 'temp__value temp__value_with-unit'})
+        counter = 0
+
+        def class_no_id(tag):
+            return tag.has_attr('aria-hidden') and not tag.has_attr('class')
+
+        for tag in soup.find_all(class_no_id):
+            if counter != 0:
+                print(tag.text)
+                # print(tag.text.split())
+            counter = 1
+
+    def probe(self):
+
+        pass
+
 
     def parsing(self):
         pass
+
+weather_program = WeatherMaker()
+weather_program.run()

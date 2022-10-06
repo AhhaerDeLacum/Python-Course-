@@ -51,6 +51,7 @@
 # В нём должен быть метод, получающий прогноз с выбранного вами сайта (парсинг + re) за некоторый диапазон дат,
 # а затем, получив данные, сформировать их в словарь {погода: Облачная, температура: 10, дата:datetime...}
 import codecs
+import re
 import sys
 
 import requests
@@ -147,6 +148,10 @@ class WeatherMaker:
             'min_temperature': '',
             'min_temperature': '',
         }
+        self.pattern_day_with_month = r'[0-9]{1,2} [А-я]{3}'
+        self.pattern_weather = r''
+        self.pattern_max_and_min_temperature = r'[^\w]{1}\d{1,2}'
+        self.pattern_min_temperature = r''
 
     def run(self):
         self.open()
@@ -167,8 +172,33 @@ class WeatherMaker:
 
         for tag in soup.find_all(class_no_id):
             if counter != 0:
-                print(tag.text)
+                # print(tag.text)
                 # print(tag.text.split())
+                dict_of_weather = {
+                    'day_of_week': '',
+                    'day_with_month': '',
+                    'weather': '',
+                    'max_temperature': '',
+                    'min_temperature': '',
+                    'min_temperature': '',
+                }
+                if 'Вчера' in tag.text:
+                    day_of_week = (tag.text[:5])
+                elif 'Сегодня' in tag.text:
+                    day_of_week = (tag.text[:7])
+                else:
+                    """Пн-Вс из двух букв"""
+                    day_of_week = (tag.text[:2])
+
+
+                # print(day_of_week)
+
+
+
+                day_with_month = str(re.findall(self.pattern_day_with_month, tag.text))
+                max_temperature,  min_temperature = (re.findall(self.pattern_max_and_min_temperature, tag.text))
+
+
             counter = 1
 
     def probe(self):

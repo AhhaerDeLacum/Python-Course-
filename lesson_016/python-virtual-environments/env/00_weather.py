@@ -149,7 +149,7 @@ class WeatherMaker:
             'min_temperature': '',
         }
         self.pattern_day_with_month = r'[0-9]{1,2} [А-я]{3}'
-        self.pattern_weather = r''
+        self.pattern_weather = r'\d[А-я]{1,12} {0,1}[А-я]{0,12} {0,1}[А-я]{0,12}'
         self.pattern_max_and_min_temperature = r'[^\w]{1}\d{1,2}'
         self.pattern_min_temperature = r''
 
@@ -172,7 +172,7 @@ class WeatherMaker:
 
         for tag in soup.find_all(class_no_id):
             if counter != 0:
-                # print(tag.text)
+                print(tag.text)
                 # print(tag.text.split())
                 dict_of_weather = {
                     'day_of_week': '',
@@ -184,19 +184,32 @@ class WeatherMaker:
                 }
                 if 'Вчера' in tag.text:
                     day_of_week = (tag.text[:5])
+
+                    day_with_month = re.search(self.pattern_day_with_month, tag.text).group()
+                    max_temperature, min_temperature = (re.findall(self.pattern_max_and_min_temperature, tag.text))
+                    weather = re.search(self.pattern_weather, tag.text).group()[1:]
                 elif 'Сегодня' in tag.text:
                     day_of_week = (tag.text[:7])
+                    weather = re.findall(self.pattern_weather, tag.text)[1][1:]
+
+                    day_with_month = re.search(self.pattern_day_with_month, tag.text).group()
+                    max_temperature, min_temperature = (re.findall(self.pattern_max_and_min_temperature, tag.text))
                 else:
                     """Пн-Вс из двух букв"""
                     day_of_week = (tag.text[:2])
 
+                    day_with_month = re.search(self.pattern_day_with_month, tag.text).group()
+                    max_temperature, min_temperature = (re.findall(self.pattern_max_and_min_temperature, tag.text))
+                    weather = re.search(self.pattern_weather, tag.text).group()[1:]
+                print(day_of_week)
+                print(day_with_month)
+                print(max_temperature, min_temperature)
+                print(weather)
 
-                # print(day_of_week)
 
 
 
-                day_with_month = str(re.findall(self.pattern_day_with_month, tag.text))
-                max_temperature,  min_temperature = (re.findall(self.pattern_max_and_min_temperature, tag.text))
+
 
 
             counter = 1

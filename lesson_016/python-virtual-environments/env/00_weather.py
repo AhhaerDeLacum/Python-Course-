@@ -168,6 +168,7 @@ class WeatherMaker:
         list_of_weather = soup.find_all('div', {'class': 'forecast-briefly__condition'})
         list_of_temperature_max = soup.find_all('span', {'class': 'temp__value temp__value_with-unit'})
         list_of_temperature_min = soup.find_all('span', {'class': 'temp__value temp__value_with-unit'})
+
         counter = 0
 
         def tag_has_attr_aria_hidden(tag):
@@ -184,6 +185,8 @@ class WeatherMaker:
                     'max_temperature': '',
                     'min_temperature': '',
                 }
+                """Переменные для изменений значений tag.text 'Вчера' и 'Сегодня'
+                """
                 now = datetime.now()
                 list_day_of_week = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
                 yesterday = now.weekday() - 1
@@ -214,6 +217,7 @@ class WeatherMaker:
                 dict_of_weather['max_temperature'] = max_temperature
                 dict_of_weather['min_temperature'] = min_temperature
                 dict_of_weather['weather'] = weather
+
                 print(day_of_week)
                 print(day_with_month)
                 print(max_temperature, min_temperature)

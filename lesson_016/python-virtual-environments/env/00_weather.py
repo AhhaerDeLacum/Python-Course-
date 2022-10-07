@@ -53,6 +53,7 @@
 import codecs
 import re
 import sys
+from datetime import datetime
 
 import requests
 from bs4 import BeautifulSoup
@@ -148,6 +149,7 @@ class WeatherMaker:
             'min_temperature': '',
             'min_temperature': '',
         }
+        self.weather_per_days_dict = {}
         self.pattern_day_with_month = r'[0-9]{1,2} [А-я]{3}'
         self.pattern_weather = r'\d[А-я]{1,12} {0,1}[А-я]{0,12} {0,1}[А-я]{0,12}'
         self.pattern_max_and_min_temperature = r'[^\w]{1}\d{1,2}'
@@ -155,6 +157,7 @@ class WeatherMaker:
 
     def run(self):
         self.open()
+        print(self.weather_per_days_dict)
 
     def open(self):
         pass
@@ -167,12 +170,12 @@ class WeatherMaker:
         list_of_temperature_min = soup.find_all('span', {'class': 'temp__value temp__value_with-unit'})
         counter = 0
 
-        def class_no_id(tag):
+        def tag_has_attr_aria_hidden(tag):
             return tag.has_attr('aria-hidden') and not tag.has_attr('class')
 
-        for tag in soup.find_all(class_no_id):
+        for tag in soup.find_all(tag_has_attr_aria_hidden):
             if counter != 0:
-                print(tag.text)
+                ##########################################################   print(tag.text)
                 # print(tag.text.split())
                 dict_of_weather = {
                     'day_of_week': '',
@@ -180,16 +183,19 @@ class WeatherMaker:
                     'weather': '',
                     'max_temperature': '',
                     'min_temperature': '',
-                    'min_temperature': '',
                 }
+                now = datetime.now()
+                list_day_of_week = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
+                yesterday = now.weekday() - 1
+                today = now.weekday()
                 if 'Вчера' in tag.text:
-                    day_of_week = (tag.text[:5])
+                    day_of_week = list_day_of_week[yesterday]
 
                     day_with_month = re.search(self.pattern_day_with_month, tag.text).group()
                     max_temperature, min_temperature = (re.findall(self.pattern_max_and_min_temperature, tag.text))
                     weather = re.search(self.pattern_weather, tag.text).group()[1:]
                 elif 'Сегодня' in tag.text:
-                    day_of_week = (tag.text[:7])
+                    day_of_week = list_day_of_week[today]
                     weather = re.findall(self.pattern_weather, tag.text)[1][1:]
 
                     day_with_month = re.search(self.pattern_day_with_month, tag.text).group()
@@ -201,17 +207,19 @@ class WeatherMaker:
                     day_with_month = re.search(self.pattern_day_with_month, tag.text).group()
                     max_temperature, min_temperature = (re.findall(self.pattern_max_and_min_temperature, tag.text))
                     weather = re.search(self.pattern_weather, tag.text).group()[1:]
+                """Может надо преобразовать мин и макс температуру в int() """
+
+                dict_of_weather['day_of_week'] = day_of_week
+                dict_of_weather['day_with_month'] = day_with_month
+                dict_of_weather['max_temperature'] = max_temperature
+                dict_of_weather['min_temperature'] = min_temperature
+                dict_of_weather['weather'] = weather
                 print(day_of_week)
                 print(day_with_month)
                 print(max_temperature, min_temperature)
                 print(weather)
-
-
-
-
-
-
-
+                print(dict_of_weather)
+                self.weather_per_days_dict[day_with_month] = dict_of_weather
             counter = 1
 
     def probe(self):
@@ -221,6 +229,7 @@ class WeatherMaker:
 
     def parsing(self):
         pass
+
 
 weather_program = WeatherMaker()
 weather_program.run()

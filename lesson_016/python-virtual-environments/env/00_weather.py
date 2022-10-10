@@ -148,6 +148,8 @@ class WeatherMaker:
             'max_temperature': '',
             'min_temperature': '',
             'min_temperature': '',
+            'day': '',
+            'month': '',
         }
         self.weather_per_days_dict = {}
         self.pattern_day_with_month = r'[0-9]{1,2} [А-я]{3}'
@@ -180,7 +182,8 @@ class WeatherMaker:
                 # print(tag.text.split())
                 dict_of_weather = {
                     'day_of_week': '',
-                    'day_with_month': '',
+                    'day': '',
+                    'month': '',
                     'weather': '',
                     'max_temperature': '',
                     'min_temperature': '',
@@ -194,36 +197,38 @@ class WeatherMaker:
                 if 'Вчера' in tag.text:
                     day_of_week = list_day_of_week[yesterday]
 
-                    day_with_month = re.search(self.pattern_day_with_month, tag.text).group()
+                    day, month = re.search(self.pattern_day_with_month, tag.text).group().split()
                     max_temperature, min_temperature = (re.findall(self.pattern_max_and_min_temperature, tag.text))
                     weather = re.search(self.pattern_weather, tag.text).group()[1:]
                 elif 'Сегодня' in tag.text:
                     day_of_week = list_day_of_week[today]
                     weather = re.findall(self.pattern_weather, tag.text)[1][1:]
 
-                    day_with_month = re.search(self.pattern_day_with_month, tag.text).group()
+                    day, month = re.search(self.pattern_day_with_month, tag.text).group().split()
                     max_temperature, min_temperature = (re.findall(self.pattern_max_and_min_temperature, tag.text))
                 else:
                     """Пн-Вс из двух букв"""
                     day_of_week = (tag.text[:2])
 
-                    day_with_month = re.search(self.pattern_day_with_month, tag.text).group()
+                    day, month = re.search(self.pattern_day_with_month, tag.text).group().split()
                     max_temperature, min_temperature = (re.findall(self.pattern_max_and_min_temperature, tag.text))
                     weather = re.search(self.pattern_weather, tag.text).group()[1:]
                 """Может надо преобразовать мин и макс температуру в int() """
 
                 dict_of_weather['day_of_week'] = day_of_week
-                dict_of_weather['day_with_month'] = day_with_month
+                dict_of_weather['day'] = day
+                dict_of_weather['month'] = month #########Почему-то ошибка с принтом дей и монтх
                 dict_of_weather['max_temperature'] = max_temperature
                 dict_of_weather['min_temperature'] = min_temperature
                 dict_of_weather['weather'] = weather
 
                 print(day_of_week)
-                print(day_with_month)
+                print(day)
+                print(month)
                 print(max_temperature, min_temperature)
                 print(weather)
                 print(dict_of_weather)
-                self.weather_per_days_dict[day_with_month] = dict_of_weather
+                self.weather_per_days_dict[day] = dict_of_weather
             counter = 1
 
     def probe(self):

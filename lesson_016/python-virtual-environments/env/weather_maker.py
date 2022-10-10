@@ -40,6 +40,7 @@ class WeatherMaker:
 
     def do_u_want_to_exit(self):
         exit_ = int(input('Если вы хотите продолжить, то нажмите 1, а если выйти, то нажмите 2 '))
+        """Проверка только на 2"""
         if exit_ == 2:
             self.no_exit = False
 

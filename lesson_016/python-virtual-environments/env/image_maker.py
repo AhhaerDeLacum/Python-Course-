@@ -59,9 +59,7 @@ class ImageMaker:
         brows, bcols = img_background.shape[:2]
         rows, cols, channels = img_weather.shape
         # Ниже я изменил roi, чтобы картинка выводилась посередине, а не в левом верхнем углу
-        roi = img_background[int(brows / 2) - int(rows / 2):int(brows / 2) + int(rows / 2), int(bcols / 2) -
-                                                                                  int(cols / 2):int(bcols / 2) + int(
-            cols / 2)]
+        roi = img_background[0:rows, 0:cols]
 
         img2gray = cv2.cvtColor(img_weather, cv2.COLOR_BGR2GRAY)
         ret, mask = cv2.threshold(img2gray, 10, 255, cv2.THRESH_BINARY)

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import cv2
+from datetime import datetime
 # Добавить класс ImageMaker.
 # Снабдить его методом рисования открытки
 # (использовать OpenCV, в качестве заготовки брать lesson_016/python_snippets/external_data/probe.jpg):
@@ -22,8 +23,8 @@ class ImageMaker:
     PATH_IMAGE_CARDS_DIRECTORY = os.path.join(project, image_cards_directory)
     os.makedirs(PATH_IMAGE_CARDS_DIRECTORY, exist_ok=True)
 
-    def __init__(self):
-        self.example_of_postcard = 'probe.jpg'
+    def __init__(self, weather_from_data=None, path_cards_directory=PATH_IMAGE_CARDS_DIRECTORY):
+        self.example_of_postcard = 'weather_img/probe.jpg'
         self.image = None
         self.font = cv2.FONT_HERSHEY_COMPLEX
         self.weather_cloud = 'weather_img/cloud.jpg'
@@ -31,16 +32,45 @@ class ImageMaker:
         self.weather_snow = 'weather_img/snow.jpg'
         self.weather_sun = 'weather_img/snow.jpg'
         self.image_weather = None
-    def save(self, image):
-        path = os.path.join(self.image_cards_directory, 'октябрь')
+        self.path_cards_directory = path_cards_directory
+        self.weather = weather_from_data
+        self.run()
+        self.type_of_color = None
+
+    def save(self, image, day):
+        path = os.path.join(self.image_cards_directory, f'{self.weather.month}')
         path = os.path.normpath(path)
+        # 'lesson_016/python-virtual-environments/env/image_cards/ноя'
+        #C:\Users\mrfen\PycharmProjects\probe\lesson_016\python-virtual-environments\env\image_cards\ноя
+        month = self.weather.month
+        # month = self.weather.month.encode(encodings='cp1251')
+        #lesson_016/python-virtual-environments/env/image_cards/ноя
+        # month = self.weather.month(encodings='cp1251')
         os.makedirs(path, exist_ok=True)
-        cv2.imwrite(f'октябрь.jpg', image)
+        # cv2.imwrite(f'{day}_{month}.jpg', image)
+        # cv2.imwrite(f'{day}_{month}', image)
+        # cv2.imwrite(f'{day}_'+month+'_.jpg', image)
+        # cv2.imwrite(u'{}_{}.jpg'.format(day, month), image)
+        now = datetime.now()
+        month = now.month
+        cv2.imwrite(f'{path}/{day}_{month}.jpg', image)
+        # os.path.abspath()
 
     def select_properties_for_methods(self):
-
-        self.image_weather = cv2.imread(self.weather_sun)
-
+        # self.image_weather = cv2.imread(self.weather_sun)
+        if 'дожд' in self.weather.weather.lower():
+            self.image_weather = cv2.imread(self.weather_rain)
+            self.type_of_color = 2
+        elif 'солн' in self.weather.weather.lower():
+            self.image_weather = cv2.imread(self.weather_sun)
+            self.type_of_color = 1
+        elif 'снеж' in self.weather.weather.lower():
+            self.image_weather = cv2.imread(self.weather_snow)
+            self.type_of_color = 4
+        else:
+            self.image_weather = cv2.imread(self.weather_cloud)
+            self.type_of_color = 3
+            # self.image_weather = cv2.imread(self.weather_sun)
         """Если погода такая-то, на основе этих условий надо вставлять в image_weather путь до картинки + еще тип для
         метода """
 
@@ -50,7 +80,7 @@ class ImageMaker:
         self.paint_postcard()
         self.put_text_on_postcard()
         self.add_image_on_postcard()
-        self.save(self.image)
+        self.save(self.image, self.weather.day_id)
 
     def add_image_on_postcard(self):
         img_background = self.image
@@ -100,9 +130,9 @@ class ImageMaker:
             cv2.waitKey(0)
             cv2.destroyAllWindows()
 
-    def paint_postcard(self, type_of_color=1):
+    def paint_postcard(self):
         image_cv2 = cv2.imread(self.example_of_postcard)
-        if type_of_color == 1:
+        if self.type_of_color == 1:
             # image_with_sunny = image_cv2.copy()
             i = 0
             k = 0
@@ -113,21 +143,21 @@ class ImageMaker:
                 k += 5
             # self.image = image_cv2
             # self.viewImage(image_cv2, 'Sunny')
-        elif type_of_color == 2:
+        elif self.type_of_color == 2:
             i = 0
             k = 0
             for _ in range(150):
                 image_cv2[:, 0 + i:50 + i] = (245, 110 + k/4, 95 + k/2)
                 i += 20
                 k += 5
-        elif type_of_color == 3:
+        elif self.type_of_color == 3:
             i = 0
             k = 0
             for _ in range(150):
                 image_cv2[:, 0 + i:50 + i] = (117 + k/4, 25 + k / 8, 0 + k / 4)
                 i += 5
                 k += 5
-        elif type_of_color == 4:
+        elif self.type_of_color == 4:
             i = 0
             k = 0
             for _ in range(150):
@@ -144,5 +174,9 @@ class ImageMaker:
         cv2.destroyAllWindows()
         self.image = image
 
-image_maker = ImageMaker()
-image_maker.run()
+
+if __name__ == "__main__":
+    imagemaker = ImageMaker()
+    imagemaker.run()
+# image_maker = ImageMaker()
+# image_maker.run()

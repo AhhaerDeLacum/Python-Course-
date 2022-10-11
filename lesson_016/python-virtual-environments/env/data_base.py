@@ -26,9 +26,9 @@ database.create_tables([Day, Weather])
 
 
 class DatabaseUpdater:
-    def __init__(self, d_m_dict, date_from=0, date_by=0):
+    def __init__(self, days_dict, date_from=0, date_by=0):
         self.db = database
-        self.days_dict = d_m_dict
+        self.days_dict = days_dict
         self.date_from = date_from
         self.date_by = date_by
 

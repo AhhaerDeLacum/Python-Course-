@@ -17,11 +17,14 @@ from datetime import datetime
 
 
 class ImageMaker:
-    """Создание новой директории для сохранения визиток-карточек"""
+    """Создание новой директории для сохранения открыток-карточек и папки для фотокарточек(weather_img) """
     project = os.path.abspath(os.curdir)
     image_cards_directory = "image_cards"
+    weather_img_directory = "weather_img"
     PATH_IMAGE_CARDS_DIRECTORY = os.path.join(project, image_cards_directory)
+    PATH_WEATHER_IMG_DIRECTORY = os.path.join(project, weather_img_directory)
     os.makedirs(PATH_IMAGE_CARDS_DIRECTORY, exist_ok=True)
+    os.makedirs(PATH_WEATHER_IMG_DIRECTORY, exist_ok=True)
 
     def __init__(self, weather_from_data=None, path_cards_directory=PATH_IMAGE_CARDS_DIRECTORY):
         self.example_of_postcard = 'weather_img/probe.jpg'
@@ -30,7 +33,7 @@ class ImageMaker:
         self.weather_cloud = 'weather_img/cloud.jpg'
         self.weather_rain = 'weather_img/rain.jpg'
         self.weather_snow = 'weather_img/snow.jpg'
-        self.weather_sun = 'weather_img/snow.jpg'
+        self.weather_sun = 'weather_img/sun.jpg'
         self.image_weather = None
         self.path_cards_directory = path_cards_directory
         self.weather = weather_from_data
@@ -38,38 +41,42 @@ class ImageMaker:
         self.type_of_color = None
 
     def save(self, image, day):
-        path = os.path.join(self.image_cards_directory, f'{self.weather.month}')
-        path = os.path.normpath(path)
+        # path = os.path.join(self.image_cards_directory, f'{self.weather.month}')
+        # path = os.path.normpath(path)
+        now = datetime.now()
+        month = now.month
+        # os.makedirs(f'{self.image_cards_directory}/{month}', exist_ok=True)
+        cv2.imwrite(f'image_cards/{day}_{month}.jpg', image)
+
         # 'lesson_016/python-virtual-environments/env/image_cards/ноя'
         #C:\Users\mrfen\PycharmProjects\probe\lesson_016\python-virtual-environments\env\image_cards\ноя
-        month = self.weather.month
+        # month = self.weather.month
         # month = self.weather.month.encode(encodings='cp1251')
         #lesson_016/python-virtual-environments/env/image_cards/ноя
         # month = self.weather.month(encodings='cp1251')
-        os.makedirs(path, exist_ok=True)
+
         # cv2.imwrite(f'{day}_{month}.jpg', image)
         # cv2.imwrite(f'{day}_{month}', image)
         # cv2.imwrite(f'{day}_'+month+'_.jpg', image)
         # cv2.imwrite(u'{}_{}.jpg'.format(day, month), image)
-        now = datetime.now()
-        month = now.month
-        cv2.imwrite(f'{path}/{day}_{month}.jpg', image)
         # os.path.abspath()
+
 
     def select_properties_for_methods(self):
         # self.image_weather = cv2.imread(self.weather_sun)
-        if 'дожд' in self.weather.weather.lower():
+
+        if 'дожд' in self.weather.weather.lower() or 'пасм' in self.weather.weather.lower():
             self.image_weather = cv2.imread(self.weather_rain)
-            self.type_of_color = 2
-        elif 'солн' in self.weather.weather.lower():
-            self.image_weather = cv2.imread(self.weather_sun)
-            self.type_of_color = 1
+            self.type_of_color = 3 #Синий градиент
+        elif 'ветр' in self.weather.weather.lower() or 'облач' in self.weather.weather.lower():
+            self.image_weather = cv2.imread(self.weather_cloud)
+            self.type_of_color = 4 #Голубой градиент
         elif 'снеж' in self.weather.weather.lower():
             self.image_weather = cv2.imread(self.weather_snow)
-            self.type_of_color = 4
-        else:
-            self.image_weather = cv2.imread(self.weather_cloud)
-            self.type_of_color = 3
+            self.type_of_color = 2 #серый градиент
+        elif 'солн' in self.weather.weather.lower() or 'ясно' in self.weather.weather.lower():
+            self.image_weather = cv2.imread(self.weather_sun)
+            self.type_of_color = 1 #Желтый градиент
             # self.image_weather = cv2.imread(self.weather_sun)
         """Если погода такая-то, на основе этих условий надо вставлять в image_weather путь до картинки + еще тип для
         метода """
@@ -106,29 +113,29 @@ class ImageMaker:
         self.image = img_background
         # cv2.imwrite('res.jpg', img_background)
 
-
+    # day = peewee.ForeignKeyField(Day)
+    # month = peewee.CharField()
+    # day_of_week = peewee.CharField()
+    # weather = peewee.DateTimeField()
+    # max_temperature = peewee.CharField()
+    # min_temperature = peewee.CharField()
     def put_text_on_postcard(self):
-        cv2.putText(self.image, 'Day_of_week', (70, 80), self.font, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
-        # cv2.putText(self.image, f'{self.weather.day_of_week}', (70, 80), self.font, 0.5,
-        #             self.color_text_date, 1, cv2.LINE_AA)
-        # cv2.putText(self.image, f'{self.weather.day_id}', (70, 110), self.font, 0.4,
-        #             self.color_text_date, 1, cv2.LINE_AA)
-        # cv2.putText(self.image, f'{self.weather.month}', (70, 140), self.font, 0.4,
-        #             self.color_text_date, 1, cv2.LINE_AA)
-        # cv2.putText(self.image, f'{self.weather.weather}', (20, 20), self.font, 0.4,
-        #             self.color_text_weather, 1, cv2.LINE_AA)
-        # cv2.putText(self.image, f'Минимальная температура: {self.weather.min_temperature}', (200, 200), self.font, 0.35,
-        #             self.color_text_weather, 1, cv2.LINE_AA)
-        # cv2.putText(self.image, f'Максимальная температура: {self.weather.max_temperature}', (200, 220), self.font,
-        #             0.35,
-        #             self.color_text_weather, 1, cv2.LINE_AA)
+        # cv2.putText(self.image, f'      ', (70, 80), self.font, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
+        cv2.putText(self.image, f'Число: {self.weather.day_id}', (30, 85), self.font, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
+        cv2.putText(self.image, f'Месяц: {self.weather.month}', (30, 105), self.font, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
+        cv2.putText(self.image, f'{self.weather.weather}', (30, 55), self.font, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
+        cv2.putText(self.image, f'День недели: {self.weather.day_of_week}', (30, 125), self.font, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
+        cv2.putText(self.image, f'Max t: {self.weather.max_temperature}', (30, 155), self.font, 0.5, (0, 0, 0), 1,
+                    cv2.LINE_AA)
+        cv2.putText(self.image, f'Min t: {self.weather.min_temperature}', (30, 175), self.font, 0.5, (0, 0, 0), 1,
+                    cv2.LINE_AA)
 
-    def open_probe_image(self):
-        def viewImage(image, name_of_window):
-            cv2.namedWindow(name_of_window, cv2.WINDOW_NORMAL)
-            cv2.imshow(name_of_window, image)
-            cv2.waitKey(0)
-            cv2.destroyAllWindows()
+    # def open_probe_image(self):
+    #     def viewImage(image, name_of_window):
+    #         cv2.namedWindow(name_of_window, cv2.WINDOW_NORMAL)
+    #         cv2.imshow(name_of_window, image)
+    #         cv2.waitKey(0)
+    #         cv2.destroyAllWindows()
 
     def paint_postcard(self):
         image_cv2 = cv2.imread(self.example_of_postcard)
@@ -178,5 +185,3 @@ class ImageMaker:
 if __name__ == "__main__":
     imagemaker = ImageMaker()
     imagemaker.run()
-# image_maker = ImageMaker()
-# image_maker.run()

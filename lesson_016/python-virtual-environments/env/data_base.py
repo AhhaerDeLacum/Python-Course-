@@ -26,11 +26,12 @@ database.create_tables([Day, Weather])
 
 
 class DatabaseUpdater:
-    def __init__(self, days_dict, date_from=0, date_by=0):
+    def __init__(self, days_dict, date_from=0, date_by=0, month=None):
         self.db = database
         self.days_dict = days_dict
         self.date_from = date_from
         self.date_by = date_by
+        self.month = month
 
     def write_data_into_db(self):
         for day, data in self.days_dict.items():
@@ -42,8 +43,8 @@ class DatabaseUpdater:
                 pass
 
     def get_data_from_database(self):
-        return Weather.select().where(Weather.day_id.between(self.date_from, self.date_by))
-
+        return Weather.select().where(Weather.month == self.month and (Weather.day_id.between(self.date_from, self.date_by)))
+        #return Weather.select().where(Weather.day_id.between(self.date_from, self.date_to))
 
 if __name__ == "__main__":
     DatabaseUpdater()

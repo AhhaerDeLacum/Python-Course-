@@ -165,16 +165,25 @@ class Weather:
         return self.weather_per_days_dict
 
     def open(self):
-        pass
-        with open('index.html', 'r', encoding='utf-8', errors='ignore') as file:
-            src = file.read()
-        soup = BeautifulSoup(src, 'html.parser')
-        list_of_date = soup.find_all('time', {'class': "time forecast-briefly__date"})  # html_doc.find_all('a', {'class': 'link link_theme_normal text forecast-briefly__day-link i-bem link_js_inited'})
-        list_of_weather = soup.find_all('div', {'class': 'forecast-briefly__condition'})
-        list_of_temperature_max = soup.find_all('span', {'class': 'temp__value temp__value_with-unit'})
-        list_of_temperature_min = soup.find_all('span', {'class': 'temp__value temp__value_with-unit'})
+        response = requests.get(self.url)
+        if response.status_code == 200:
+            src = response.text.encode(encoding='utf-8')
+            ''' Можно расскомментить и спарсить данные и  сохранить сначала в файл, а потом открыть его через файл
+            
+            # with open("index.html", 'w', encoding='utf-8', errors='ignore') as file:
+            #     file.write(response.text)
+            
+            with open('index.html', 'r', encoding='utf-8', errors='ignore') as file:
+                src = file.read()
+            
+            '''
+            soup = BeautifulSoup(src, 'html.parser')
+            list_of_date = soup.find_all('time', {'class': "time forecast-briefly__date"})  # html_doc.find_all('a', {'class': 'link link_theme_normal text forecast-briefly__day-link i-bem link_js_inited'})
+            list_of_weather = soup.find_all('div', {'class': 'forecast-briefly__condition'})
+            list_of_temperature_max = soup.find_all('span', {'class': 'temp__value temp__value_with-unit'})
+            list_of_temperature_min = soup.find_all('span', {'class': 'temp__value temp__value_with-unit'})
 
-        counter = 0
+            counter = 0
 
         def tag_has_attr_aria_hidden(tag):
             return tag.has_attr('aria-hidden') and not tag.has_attr('class')

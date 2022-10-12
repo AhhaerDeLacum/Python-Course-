@@ -1,4 +1,6 @@
 # -*- coding: utf-8
+from datetime import datetime
+
 from data_base import DatabaseUpdater
 from weather import Weather
 from image_maker import ImageMaker
@@ -28,8 +30,10 @@ class WeatherMaker:
         print('Выберите интересующую дату. Например: От 1 до 31')
         day_from = input('C: ')
         day_by = input('И до: ')
+        now = datetime.now()
+        month = now.month
         '''Для проверки, чтобы выводить на консоль или делать открытки'''
-        self.data_not_none = DatabaseUpdater(self.days_dict, day_from, day_by).get_data_from_database()
+        self.data_not_none = DatabaseUpdater(self.days_dict, day_from, day_by, month).get_data_from_database()
 
     def print_weather_on_console(self):
         if self.data_not_none is None:
